@@ -1,0 +1,58 @@
+# project  configured on Mon Feb 10 18:42:56 2025 by
+# waf 1.7.11 (abi 98, python 30d01f0 on darwin)
+# using /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/waf configure
+#
+----------------------------------------
+Setting top to
+/Users/cobre/Developer/pebble/blotch
+----------------------------------------
+Setting out to
+/Users/cobre/Developer/pebble/blotch/build
+----------------------------------------
+Checking for program webpack
+/Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/node_modules/.bin/webpack
+find program=['webpack'] paths=['/Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/node_modules/.bin'] var='WEBPACK' -> '/Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/node_modules/.bin/webpack'
+----------------------------------------
+Found Pebble SDK for diorite in:
+/Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/diorite
+----------------------------------------
+Checking for program gcc,cc
+arm-none-eabi-gcc
+find program=['gcc', 'cc'] paths='' var='CC' -> 'arm-none-eabi-gcc'
+----------------------------------------
+Checking for program ar
+arm-none-eabi-ar
+find program=['ar'] paths='' var='AR' -> 'arm-none-eabi-ar'
+----------------------------------------
+Found Pebble SDK for chalk in:
+/Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/chalk
+----------------------------------------
+Checking for program gcc,cc
+arm-none-eabi-gcc
+find program=['gcc', 'cc'] paths='' var='CC' -> 'arm-none-eabi-gcc'
+----------------------------------------
+Checking for program ar
+arm-none-eabi-ar
+find program=['ar'] paths='' var='AR' -> 'arm-none-eabi-ar'
+----------------------------------------
+Found Pebble SDK for basalt in:
+/Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/basalt
+----------------------------------------
+Checking for program gcc,cc
+arm-none-eabi-gcc
+find program=['gcc', 'cc'] paths='' var='CC' -> 'arm-none-eabi-gcc'
+----------------------------------------
+Checking for program ar
+arm-none-eabi-ar
+find program=['ar'] paths='' var='AR' -> 'arm-none-eabi-ar'
+----------------------------------------
+Found Pebble SDK for aplite in:
+/Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite
+----------------------------------------
+Checking for program gcc,cc
+arm-none-eabi-gcc
+find program=['gcc', 'cc'] paths='' var='CC' -> 'arm-none-eabi-gcc'
+----------------------------------------
+Checking for program ar
+arm-none-eabi-ar
+find program=['ar'] paths='' var='AR' -> 'arm-none-eabi-ar'
