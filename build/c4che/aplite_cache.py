@@ -46,7 +46,7 @@ PEBBLE_SDK_ROOT = '/Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs
 PLATFORM = {'NAME': 'aplite', 'MAX_APP_BINARY_SIZE': 65536, 'MAX_APP_MEMORY_SIZE': 24576, 'MAX_WORKER_MEMORY_SIZE': 10240, 'MAX_RESOURCES_SIZE_APPSTORE': 131072, 'MAX_RESOURCES_SIZE_APPSTORE_2_X': 98304, 'MAX_RESOURCES_SIZE': 524288, 'DEFINES': ['PBL_PLATFORM_APLITE', 'PBL_BW', 'PBL_RECT', 'PBL_COMPASS', 'PBL_DISPLAY_WIDTH=144', 'PBL_DISPLAY_HEIGHT=168'], 'BUILD_DIR': 'aplite', 'BUNDLE_BIN_DIR': 'aplite', 'ADDITIONAL_TEXT_LINES_FOR_PEBBLE_H': [], 'MAX_FONT_GLYPH_SIZE': 256, 'TAGS': ['aplite', 'bw', 'rect', 'compass', '144w', '168h']}
 PLATFORM_NAME = 'aplite'
 PREFIX = '/usr/local'
-PROJECT_INFO = {'displayName': 'blotch', 'uuid': 'e03ca915-a42b-475e-b404-f5cf56f0d3c4', 'sdkVersion': '3', 'enableMultiJS': True, 'targetPlatforms': ['aplite', 'basalt', 'chalk', 'diorite'], 'watchapp': {'watchface': True}, 'messageKeys': {'dummy': 10000}, 'resources': {'media': []}, 'name': 'blotch', 'shortName': 'blotch', 'longName': 'blotch', 'versionLabel': '1.0', 'companyName': 'MakeAwesomeHappen', 'appKeys': {'dummy': 10000}}
+PROJECT_INFO = {'displayName': 'blotch', 'uuid': 'e03ca915-a42b-475e-b404-f5cf56f0d3c4', 'sdkVersion': '3', 'enableMultiJS': True, 'targetPlatforms': ['aplite', 'basalt', 'chalk', 'diorite'], 'watchapp': {'watchface': True}, 'messageKeys': {'dummy': 10000}, 'resources': {'media': []}, 'name': 'blotch', 'shortName': 'blotch', 'longName': 'blotch', 'versionLabel': '1.0', 'companyName': 'cobre', 'appKeys': {'dummy': 10000}}
 REQUESTED_PLATFORMS = ['aplite', 'basalt', 'chalk', 'diorite']
 RESOURCES_JSON = []
 RPATH_ST = '-Wl,-rpath,%s'
@@ -61,7 +61,7 @@ STLIB_MARKER = None
 STLIB_ST = '-l%s'
 SUPPORTED_PLATFORMS = ['basalt', 'aplite', 'diorite', 'chalk', 'emery']
 TARGET_PLATFORMS = ['diorite', 'chalk', 'basalt', 'aplite']
-TIMESTAMP = 1739230976
+TIMESTAMP = 1739238384
 USE_GROUPS = True
 VERBOSE = 0
 WEBPACK = '/Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/node_modules/.bin/webpack'

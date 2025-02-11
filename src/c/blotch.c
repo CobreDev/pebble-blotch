@@ -4,7 +4,7 @@ static Window *s_main_window;
 static TextLayer *s_time_layer, *s_date_layer;
 static TextLayer *s_week_layers[7]; // One text layer per weekday
 static Layer *s_underline_layer;
-static int s_current_day_index = 0;
+static int s_current_day_index = -1; // Initialize to an invalid value
 
 static const char *weekdays[] = {"S", "M", "T", "W", "T", "F", "S"};
 static const int underline_positions[] = {10, 28, 46, 64, 82, 100, 118}; // x-coordinates for each day
@@ -16,7 +16,7 @@ static void underline_layer_update_proc(Layer *layer, GContext *ctx) {
     // Calculate the x position based on the current day index
     GRect day_bounds = layer_get_frame(text_layer_get_layer(s_week_layers[s_current_day_index]));
     int x_position = day_bounds.origin.x + (day_bounds.size.w / 2) - 9; // Center the underline within the text layer
-    GRect underline_rect = GRect(x_position, 140, 18, 2); // Vertical position, Width, and Height of underline
+    GRect underline_rect = GRect(x_position, day_bounds.origin.y + day_bounds.size.h + 2, 18, 2); // Vertical position, Width, and Height of underline
     graphics_draw_rect(ctx, underline_rect);
 }
 
@@ -27,37 +27,82 @@ static void update_time() {
     static char time_buffer[6];
     static char date_buffer[12];
 
-    strftime(time_buffer, sizeof(time_buffer), clock_is_24h_style() ? "%H:%M" : "%l:%M", tick_time);
-    strftime(date_buffer, sizeof(date_buffer), "%B %d", tick_time);
+    static int last_hour = -1;
+    static int last_minute = -1;
+    static int last_day = -1;
 
-    text_layer_set_text(s_time_layer, time_buffer);
-    text_layer_set_text(s_date_layer, date_buffer);
+    if (last_hour != tick_time->tm_hour || last_minute != tick_time->tm_min) {
+        strftime(time_buffer, sizeof(time_buffer), clock_is_24h_style() ? "%H:%M" : "%l:%M", tick_time);
+        text_layer_set_text(s_time_layer, time_buffer);
+        last_hour = tick_time->tm_hour;
+        last_minute = tick_time->tm_min;
+    }
+
+    if (last_day != tick_time->tm_mday) {
+        strftime(date_buffer, sizeof(date_buffer), "%B %d", tick_time);
+        text_layer_set_text(s_date_layer, date_buffer);
+        last_day = tick_time->tm_mday;
+    }
 
     // Calculate current weekday index
-    s_current_day_index = tick_time->tm_wday; // Sunday = 0, Saturday = 6
-    
-    // Trigger redraw of the underline
-    layer_mark_dirty(s_underline_layer);
+    int new_day_index = tick_time->tm_wday; // Sunday = 0, Saturday = 6
+    if (s_current_day_index != new_day_index) {
+        s_current_day_index = new_day_index;
+        // Trigger redraw of the underline
+        layer_mark_dirty(s_underline_layer);
+    }
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
     update_time();
 }
 
+static void unobstructed_will_change(GRect final_unobstructed_screen_area, void *context) {
+    // Handle changes before the unobstructed area changes
+}
+
+static void unobstructed_did_change(void *context) {
+    // Handle changes after the unobstructed area changes
+    Layer *window_layer = window_get_root_layer(s_main_window);
+    GRect bounds = layer_get_unobstructed_bounds(window_layer);
+
+    static GRect last_bounds = { .origin = {0, 0}, .size = {0, 0} };
+    if (grect_equal(&bounds, &last_bounds)) {
+        return; // No change in bounds, no need to update layout
+    }
+    last_bounds = bounds;
+
+    // Update the layout based on the new bounds
+    // Time Layer
+    int time_layer_height = 50;
+    int time_layer_y = (bounds.size.h - time_layer_height) / 2;
+    layer_set_frame(text_layer_get_layer(s_time_layer), GRect(0, time_layer_y, bounds.size.w - 10, time_layer_height));
+
+    // Date Layer
+    int date_layer_height = 30;
+    int date_layer_y = (time_layer_y - date_layer_height) / 1;
+    layer_set_frame(text_layer_get_layer(s_date_layer), GRect(0, date_layer_y, bounds.size.w - 10, date_layer_height));
+
+    // Weekday Layers
+    int day_layer_height = 30;
+    int day_layer_y = time_layer_y + time_layer_height + (bounds.size.h - (time_layer_y + time_layer_height) - day_layer_height) / 8;
+    for (int i = 0; i < 7; i++) {
+        layer_set_frame(text_layer_get_layer(s_week_layers[i]), GRect(10 + i * 18, day_layer_y, 20, day_layer_height));
+    }
+
+    // Underline Layer
+    layer_set_frame(s_underline_layer, bounds);
+
+    // Redraw the underline
+    layer_mark_dirty(s_underline_layer);
+}
+
 static void main_window_load(Window *window) {
     Layer *window_layer = window_get_root_layer(window);
-    GRect bounds = layer_get_bounds(window_layer);
+    GRect bounds = layer_get_unobstructed_bounds(window_layer);
 
     // Set window background color to black
     window_set_background_color(window, GColorBlack);
-
-    // Date Layer
-    s_date_layer = text_layer_create(GRect(0, 30, bounds.size.w - 10, 30));
-    text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
-    text_layer_set_text_alignment(s_date_layer, GTextAlignmentRight);
-    text_layer_set_background_color(s_date_layer, GColorClear);
-    text_layer_set_text_color(s_date_layer, GColorWhite); // Change text color to white
-    layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
 
     // Time Layer
     int time_layer_height = 50;
@@ -69,9 +114,21 @@ static void main_window_load(Window *window) {
     text_layer_set_text_color(s_time_layer, GColorWhite); // Change text color to white
     layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
 
+    // Date Layer
+    int date_layer_height = 30;
+    int date_layer_y = (time_layer_y - date_layer_height) / 1;
+    s_date_layer = text_layer_create(GRect(0, date_layer_y, bounds.size.w - 10, date_layer_height)); // Centered between top and time layer
+    text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
+    text_layer_set_text_alignment(s_date_layer, GTextAlignmentRight);
+    text_layer_set_background_color(s_date_layer, GColorClear);
+    text_layer_set_text_color(s_date_layer, GColorWhite); // Change text color to white
+    layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
+
     // Weekday Layers
+    int day_layer_height = 30;
+    int day_layer_y = time_layer_y + time_layer_height + (bounds.size.h - (time_layer_y + time_layer_height) - day_layer_height) / 8;
     for (int i = 0; i < 7; i++) {
-        s_week_layers[i] = text_layer_create(GRect(10 + i * 18, 110, 20, 30));
+        s_week_layers[i] = text_layer_create(GRect(10 + i * 18, day_layer_y, 20, day_layer_height)); // Centered between bottom and time layer
         text_layer_set_font(s_week_layers[i], fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
         text_layer_set_text_alignment(s_week_layers[i], GTextAlignmentCenter);
         text_layer_set_background_color(s_week_layers[i], GColorClear);
@@ -106,9 +163,17 @@ static void init() {
 
     window_stack_push(s_main_window, true);
     tick_timer_service_subscribe(MINUTE_UNIT, tick_handler);
+
+    // Subscribe to unobstructed area events
+    UnobstructedAreaHandlers handlers = {
+        .will_change = unobstructed_will_change,
+        .did_change = unobstructed_did_change
+    };
+    unobstructed_area_service_subscribe(handlers, NULL);
 }
 
 static void deinit() {
+    unobstructed_area_service_unsubscribe();
     window_destroy(s_main_window);
 }
 

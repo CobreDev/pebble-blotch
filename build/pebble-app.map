@@ -1186,180 +1186,186 @@ LOAD /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../li
  .note.gnu.build-id
                 0x0000000000000084       0x24 linker stubs
 
-.text           0x00000000000000a8      0x55b
+.text           0x00000000000000a8      0x5db
  *(.text)
  .text          0x00000000000000a8       0x14 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
  *(.text.*)
  .text.update_time
-                0x00000000000000bc       0x98 src/c/blotch.c.33.o
+                0x00000000000000bc       0xe8 src/c/blotch.c.33.o
  .text.tick_handler
-                0x0000000000000154        0x4 src/c/blotch.c.33.o
+                0x00000000000001a4        0x4 src/c/blotch.c.33.o
  .text.main_window_unload
-                0x0000000000000158       0x48 src/c/blotch.c.33.o
+                0x00000000000001a8       0x48 src/c/blotch.c.33.o
  .text.main_window_load
-                0x00000000000001a0      0x1c0 src/c/blotch.c.33.o
+                0x00000000000001f0      0x1e4 src/c/blotch.c.33.o
  .text.underline_layer_update_proc
-                0x0000000000000360       0x6c src/c/blotch.c.33.o
+                0x00000000000003d4       0x78 src/c/blotch.c.33.o
  .text.startup.main
-                0x00000000000003cc       0x68 src/c/blotch.c.33.o
-                0x00000000000003cc                main
+                0x000000000000044c       0x68 src/c/blotch.c.33.o
+                0x000000000000044c                main
  .text.app_event_loop
-                0x0000000000000434        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000434                app_event_loop
+                0x00000000000004b4        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000004b4                app_event_loop
  .text.clock_is_24h_style
-                0x0000000000000440        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000440                clock_is_24h_style
+                0x00000000000004c0        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000004c0                clock_is_24h_style
  .text.fonts_get_system_font
-                0x000000000000044c        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x000000000000044c                fonts_get_system_font
+                0x00000000000004cc        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000004cc                fonts_get_system_font
  .text.graphics_draw_rect
-                0x0000000000000458        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000458                graphics_draw_rect
+                0x00000000000004d8        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000004d8                graphics_draw_rect
  .text.layer_add_child
-                0x0000000000000464        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000464                layer_add_child
+                0x00000000000004e4        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000004e4                layer_add_child
  .text.layer_create
-                0x0000000000000470        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000470                layer_create
+                0x00000000000004f0        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000004f0                layer_create
  .text.layer_destroy
-                0x000000000000047c        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x000000000000047c                layer_destroy
+                0x00000000000004fc        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000004fc                layer_destroy
  .text.layer_get_bounds
-                0x0000000000000488        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000488                layer_get_bounds
+                0x0000000000000508        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000508                layer_get_bounds
  .text.layer_get_frame
-                0x0000000000000494        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000494                layer_get_frame
+                0x0000000000000514        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000514                layer_get_frame
  .text.layer_mark_dirty
-                0x00000000000004a0        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x00000000000004a0                layer_mark_dirty
+                0x0000000000000520        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000520                layer_mark_dirty
  .text.layer_set_update_proc
-                0x00000000000004ac        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x00000000000004ac                layer_set_update_proc
- .text.memset   0x00000000000004b8        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x00000000000004b8                memset
+                0x000000000000052c        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x000000000000052c                layer_set_update_proc
+ .text.memset   0x0000000000000538        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000538                memset
  .text.strftime
-                0x00000000000004c4        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x00000000000004c4                strftime
+                0x0000000000000544        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000544                strftime
  .text.tick_timer_service_subscribe
-                0x00000000000004d0        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x00000000000004d0                tick_timer_service_subscribe
+                0x0000000000000550        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000550                tick_timer_service_subscribe
  .text.window_create
-                0x00000000000004dc        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x00000000000004dc                window_create
+                0x000000000000055c        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x000000000000055c                window_create
  .text.window_destroy
-                0x00000000000004e8        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x00000000000004e8                window_destroy
+                0x0000000000000568        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000568                window_destroy
  .text.window_get_root_layer
-                0x00000000000004f4        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x00000000000004f4                window_get_root_layer
+                0x0000000000000574        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000574                window_get_root_layer
  .text.window_set_window_handlers
-                0x0000000000000500        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000500                window_set_window_handlers
+                0x0000000000000580        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000580                window_set_window_handlers
  .text.window_stack_push
-                0x000000000000050c        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x000000000000050c                window_stack_push
+                0x000000000000058c        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x000000000000058c                window_stack_push
  .text.graphics_context_set_stroke_color
-                0x0000000000000518        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000518                graphics_context_set_stroke_color
+                0x0000000000000598        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000598                graphics_context_set_stroke_color
  .text.window_set_background_color
-                0x0000000000000524        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000524                window_set_background_color
+                0x00000000000005a4        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000005a4                window_set_background_color
  .text.localtime
-                0x0000000000000530        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000530                localtime
+                0x00000000000005b0        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000005b0                localtime
  .text.graphics_context_set_stroke_width
-                0x000000000000053c        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x000000000000053c                graphics_context_set_stroke_width
+                0x00000000000005bc        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000005bc                graphics_context_set_stroke_width
  .text.text_layer_create
-                0x0000000000000548        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000548                text_layer_create
+                0x00000000000005c8        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000005c8                text_layer_create
  .text.text_layer_destroy
-                0x0000000000000554        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000554                text_layer_destroy
+                0x00000000000005d4        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000005d4                text_layer_destroy
  .text.text_layer_get_layer
-                0x0000000000000560        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000560                text_layer_get_layer
+                0x00000000000005e0        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000005e0                text_layer_get_layer
  .text.text_layer_set_background_color
-                0x000000000000056c        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x000000000000056c                text_layer_set_background_color
+                0x00000000000005ec        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000005ec                text_layer_set_background_color
  .text.text_layer_set_font
-                0x0000000000000578        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000578                text_layer_set_font
+                0x00000000000005f8        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x00000000000005f8                text_layer_set_font
  .text.text_layer_set_text
-                0x0000000000000584        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000584                text_layer_set_text
+                0x0000000000000604        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000604                text_layer_set_text
  .text.text_layer_set_text_alignment
-                0x0000000000000590        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x0000000000000590                text_layer_set_text_alignment
+                0x0000000000000610        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000610                text_layer_set_text_alignment
  .text.text_layer_set_text_color
-                0x000000000000059c        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x000000000000059c                text_layer_set_text_color
- .text.time     0x00000000000005a8        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
-                0x00000000000005a8                time
+                0x000000000000061c        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x000000000000061c                text_layer_set_text_color
+ .text.time     0x0000000000000628        0xc /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+                0x0000000000000628                time
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00000000000005b4       0x4f src/c/blotch.c.33.o
+                0x0000000000000634       0x4f src/c/blotch.c.33.o
                                          0x53 (size before relaxing)
 
-.glue_7         0x0000000000000604        0x0
+.glue_7         0x0000000000000684        0x0
  .glue_7        0x0000000000000000        0x0 linker stubs
 
-.glue_7t        0x0000000000000604        0x0
+.glue_7t        0x0000000000000684        0x0
  .glue_7t       0x0000000000000000        0x0 linker stubs
 
-.vfp11_veneer   0x0000000000000604        0x0
+.vfp11_veneer   0x0000000000000684        0x0
  .vfp11_veneer  0x0000000000000000        0x0 linker stubs
 
-.v4_bx          0x0000000000000604        0x0
+.v4_bx          0x0000000000000684        0x0
  .v4_bx         0x0000000000000000        0x0 linker stubs
 
-.iplt           0x0000000000000604        0x0
+.iplt           0x0000000000000684        0x0
  .iplt          0x0000000000000000        0x0 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../lib/gcc/arm-none-eabi/4.7.2/thumb2/crtbegin.o
 
-.rel.dyn        0x0000000000000604        0x0
+.rel.dyn        0x0000000000000684        0x0
  .rel.iplt      0x0000000000000000        0x0 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../lib/gcc/arm-none-eabi/4.7.2/thumb2/crtbegin.o
 
-.data           0x0000000000000604       0x20
+.data           0x0000000000000684       0x30
  *(.data)
- .data          0x0000000000000604        0x0 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../lib/gcc/arm-none-eabi/4.7.2/thumb2/crti.o
- .data          0x0000000000000604        0x4 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../lib/gcc/arm-none-eabi/4.7.2/thumb2/crtbegin.o
-                0x0000000000000604                __dso_handle
- .data          0x0000000000000608        0x0 src/c/blotch.c.33.o
- .data          0x0000000000000608        0x0 aplite/appinfo.auto.c.33.o
- .data          0x0000000000000608        0x0 aplite/src/resource_ids.auto.c.33.o
- .data          0x0000000000000608        0x0 src/message_keys.auto.c.33.o
- .data          0x0000000000000608        0x0 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
- .data          0x0000000000000608        0x0 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../lib/gcc/arm-none-eabi/4.7.2/thumb2/crtend.o
- .data          0x0000000000000608        0x0 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../lib/gcc/arm-none-eabi/4.7.2/thumb2/crtn.o
+ .data          0x0000000000000684        0x0 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../lib/gcc/arm-none-eabi/4.7.2/thumb2/crti.o
+ .data          0x0000000000000684        0x4 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../lib/gcc/arm-none-eabi/4.7.2/thumb2/crtbegin.o
+                0x0000000000000684                __dso_handle
+ .data          0x0000000000000688        0x0 src/c/blotch.c.33.o
+ .data          0x0000000000000688        0x0 aplite/appinfo.auto.c.33.o
+ .data          0x0000000000000688        0x0 aplite/src/resource_ids.auto.c.33.o
+ .data          0x0000000000000688        0x0 src/message_keys.auto.c.33.o
+ .data          0x0000000000000688        0x0 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/sdk/SDKs/current/sdk-core/pebble/aplite/lib/libpebble.a(tmp7jpKUopebble.o)
+ .data          0x0000000000000688        0x0 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../lib/gcc/arm-none-eabi/4.7.2/thumb2/crtend.o
+ .data          0x0000000000000688        0x0 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../lib/gcc/arm-none-eabi/4.7.2/thumb2/crtn.o
  *(.data.*)
+ .data.last_day.7495
+                0x0000000000000688        0x4 src/c/blotch.c.33.o
  .data.rel.ro.local.weekdays
-                0x0000000000000608       0x1c src/c/blotch.c.33.o
+                0x000000000000068c       0x1c src/c/blotch.c.33.o
+ .data.last_minute.7494
+                0x00000000000006a8        0x4 src/c/blotch.c.33.o
+ .data.last_hour.7493
+                0x00000000000006ac        0x4 src/c/blotch.c.33.o
+ .data.s_current_day_index
+                0x00000000000006b0        0x4 src/c/blotch.c.33.o
 
-.igot.plt       0x0000000000000624        0x0
+.igot.plt       0x00000000000006b4        0x0
  .igot.plt      0x0000000000000000        0x0 /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../lib/gcc/arm-none-eabi/4.7.2/thumb2/crtbegin.o
 
-.bss            0x0000000000000624       0x44
+.bss            0x00000000000006b4       0x40
  *(.bss)
  *(.bss.*)
  .bss.s_date_layer
-                0x0000000000000624        0x4 src/c/blotch.c.33.o
+                0x00000000000006b4        0x4 src/c/blotch.c.33.o
  .bss.time_buffer.7491
-                0x0000000000000628        0x6 src/c/blotch.c.33.o
- *fill*         0x000000000000062e        0x2 
+                0x00000000000006b8        0x6 src/c/blotch.c.33.o
+ *fill*         0x00000000000006be        0x2 
  .bss.s_time_layer
-                0x0000000000000630        0x4 src/c/blotch.c.33.o
- .bss.s_current_day_index
-                0x0000000000000634        0x4 src/c/blotch.c.33.o
+                0x00000000000006c0        0x4 src/c/blotch.c.33.o
  .bss.date_buffer.7492
-                0x0000000000000638        0xc src/c/blotch.c.33.o
+                0x00000000000006c4        0xc src/c/blotch.c.33.o
  .bss.s_underline_layer
-                0x0000000000000644        0x4 src/c/blotch.c.33.o
+                0x00000000000006d0        0x4 src/c/blotch.c.33.o
  .bss.s_main_window
-                0x0000000000000648        0x4 src/c/blotch.c.33.o
+                0x00000000000006d4        0x4 src/c/blotch.c.33.o
  .bss.s_week_layers
-                0x000000000000064c       0x1c src/c/blotch.c.33.o
+                0x00000000000006d8       0x1c src/c/blotch.c.33.o
 
 DISCARD
  libc.a(*)
@@ -1398,20 +1404,20 @@ OUTPUT(/Users/cobre/Developer/pebble/blotch/build/aplite/pebble-app.elf elf32-li
  .comment       0x0000000000000000       0x4f src/message_keys.auto.c.33.o
  .comment       0x0000000000000000       0x4f /Users/cobre/Developer/pebble/.rebbletool/rebbletool/arm-cs-tools/bin/../lib/gcc/arm-none-eabi/4.7.2/thumb2/crtend.o
 
-.debug_info     0x0000000000000000     0x123d
- .debug_info    0x0000000000000000      0xe3e src/c/blotch.c.33.o
- .debug_info    0x0000000000000e3e      0x31a aplite/appinfo.auto.c.33.o
- .debug_info    0x0000000000001158       0x64 aplite/src/resource_ids.auto.c.33.o
- .debug_info    0x00000000000011bc       0x81 src/message_keys.auto.c.33.o
+.debug_info     0x0000000000000000     0x1384
+ .debug_info    0x0000000000000000      0xf85 src/c/blotch.c.33.o
+ .debug_info    0x0000000000000f85      0x31a aplite/appinfo.auto.c.33.o
+ .debug_info    0x000000000000129f       0x64 aplite/src/resource_ids.auto.c.33.o
+ .debug_info    0x0000000000001303       0x81 src/message_keys.auto.c.33.o
 
-.debug_abbrev   0x0000000000000000      0x3b3
- .debug_abbrev  0x0000000000000000      0x2ab src/c/blotch.c.33.o
- .debug_abbrev  0x00000000000002ab       0x9e aplite/appinfo.auto.c.33.o
- .debug_abbrev  0x0000000000000349       0x26 aplite/src/resource_ids.auto.c.33.o
- .debug_abbrev  0x000000000000036f       0x44 src/message_keys.auto.c.33.o
+.debug_abbrev   0x0000000000000000      0x3d2
+ .debug_abbrev  0x0000000000000000      0x2ca src/c/blotch.c.33.o
+ .debug_abbrev  0x00000000000002ca       0x9e aplite/appinfo.auto.c.33.o
+ .debug_abbrev  0x0000000000000368       0x26 aplite/src/resource_ids.auto.c.33.o
+ .debug_abbrev  0x000000000000038e       0x44 src/message_keys.auto.c.33.o
 
-.debug_loc      0x0000000000000000      0x247
- .debug_loc     0x0000000000000000      0x247 src/c/blotch.c.33.o
+.debug_loc      0x0000000000000000      0x325
+ .debug_loc     0x0000000000000000      0x325 src/c/blotch.c.33.o
 
 .debug_aranges  0x0000000000000000       0x90
  .debug_aranges
@@ -1426,20 +1432,20 @@ OUTPUT(/Users/cobre/Developer/pebble/blotch/build/aplite/pebble-app.elf elf32-li
 .debug_ranges   0x0000000000000000       0x70
  .debug_ranges  0x0000000000000000       0x70 src/c/blotch.c.33.o
 
-.debug_line     0x0000000000000000      0x58a
- .debug_line    0x0000000000000000      0x35b src/c/blotch.c.33.o
- .debug_line    0x000000000000035b      0x147 aplite/appinfo.auto.c.33.o
- .debug_line    0x00000000000004a2       0x1d aplite/src/resource_ids.auto.c.33.o
- .debug_line    0x00000000000004bf       0xcb src/message_keys.auto.c.33.o
+.debug_line     0x0000000000000000      0x590
+ .debug_line    0x0000000000000000      0x361 src/c/blotch.c.33.o
+ .debug_line    0x0000000000000361      0x147 aplite/appinfo.auto.c.33.o
+ .debug_line    0x00000000000004a8       0x1d aplite/src/resource_ids.auto.c.33.o
+ .debug_line    0x00000000000004c5       0xcb src/message_keys.auto.c.33.o
 
-.debug_str      0x0000000000000000      0x88e
- .debug_str     0x0000000000000000      0x5fd src/c/blotch.c.33.o
-                                        0x695 (size before relaxing)
- .debug_str     0x00000000000005fd      0x248 aplite/appinfo.auto.c.33.o
+.debug_str      0x0000000000000000      0x99a
+ .debug_str     0x0000000000000000      0x709 src/c/blotch.c.33.o
+                                        0x7b9 (size before relaxing)
+ .debug_str     0x0000000000000709      0x248 aplite/appinfo.auto.c.33.o
                                         0x319 (size before relaxing)
- .debug_str     0x0000000000000845       0x1f aplite/src/resource_ids.auto.c.33.o
+ .debug_str     0x0000000000000951       0x1f aplite/src/resource_ids.auto.c.33.o
                                          0xda (size before relaxing)
- .debug_str     0x0000000000000864       0x2a src/message_keys.auto.c.33.o
+ .debug_str     0x0000000000000970       0x2a src/message_keys.auto.c.33.o
                                          0xee (size before relaxing)
 
 .debug_frame    0x0000000000000000       0xc4
