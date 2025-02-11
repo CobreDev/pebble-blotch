@@ -1,8 +1,0 @@
-argv = ['/home/pebble/.pebble-sdk/SDKs/current/sdk-core/pebble/waf', 'configure', 'install']
-environ = {'NO_GCE_CHECK': 'False', 'PEBBLE_TOOL_VERSION': 'pebble-sdk-4.6-rc2-linux64', 'NODE_VERSION': '10.16.2', 'PEBBLE_SDK_VERSION': '4.3', 'NVM_DIR': '/home/pebble/.nvm', 'PEBBLE_TOOLCHAIN_PATH': '/opt/pebble-sdk-4.6-rc2-linux64/arm-cs-tools/bin', 'PATH': '/opt/pebble-sdk-4.6-rc2-linux64/arm-cs-tools/bin:/opt/pebble-sdk-4.6-rc2-linux64/bin:/home/pebble/.nvm/versions/node/v10.16.2/bin:/opt/pebble-sdk-4.6-rc2-linux64/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin', 'DISPLAY': '', '_': '/opt/pebble-sdk-4.6-rc2-linux64/.env/bin/python', 'TERM': 'xterm', 'SHLVL': '1', 'PHONESIM_PATH': '/opt/pebble-sdk-4.6-rc2-linux64/.env//bin/pypkjs', 'HOSTNAME': 'docker-desktop', 'PYTHONHOME': '/home/pebble/.pebble-sdk/SDKs/current/sdk-core/../.env', 'NODE_PATH': '/home/pebble/.pebble-sdk/SDKs/current/sdk-core/../node_modules', 'PWD': '/pebble', 'HOME': '/home/pebble', 'NOCLIMB': '1'}
-files = ['/pebble/wscript']
-hash = 6211277306917996440
-options = {'files': '', 'jobs': 12, 'verbose': 0, 'nocache': False, 'progress_bar': 0, 'no_groups': False, 'distcheck_args': None, 'top': '', 'sandbox': False, 'destdir': '', 'keep': 0, 'zones': '', 'debug': False, 'prefix': '/usr/local/', 'timestamp': None, 'download': False, 'force': False, 'targets': '', 'out': ''}
-out_dir = '/pebble/build'
-run_dir = '/pebble'
-top_dir = '/pebble'
