@@ -1,24 +1,51 @@
 #include <pebble.h>
+#include "settings.h"
 
 static Window *s_main_window;
 static TextLayer *s_time_layer, *s_date_layer;
 static TextLayer *s_week_layers[7]; // One text layer per weekday
+static Layer *s_background_layer;
 static Layer *s_underline_layer;
 static int s_current_day_index = -1; // Initialize to an invalid value
+
+// A struct for our specific settings (see main.h)
+ClaySettings settings;
 
 static const char *weekdays[] = {"S", "M", "T", "W", "T", "F", "S"};
 static const int underline_positions[] = {10, 28, 46, 64, 82, 100, 118}; // x-coordinates for each day
 
 static void underline_layer_update_proc(Layer *layer, GContext *ctx) {
     graphics_context_set_stroke_width(ctx, 3);
-    graphics_context_set_stroke_color(ctx, GColorWhite); // Change underline color to white
+    graphics_context_set_stroke_color(ctx, settings.color_secondary); // Change underline color to white
     
     // Calculate the x position based on the current day index
     GRect day_bounds = layer_get_frame(text_layer_get_layer(s_week_layers[s_current_day_index]));
     int x_position = day_bounds.origin.x + (day_bounds.size.w / 2) - 9; // Center the underline within the text layer
-    GRect underline_rect = GRect(x_position, day_bounds.origin.y + day_bounds.size.h + 2, 18, 2); // Vertical position, Width, and Height of underline
+    GRect underline_rect = GRect(x_position, day_bounds.origin.y + day_bounds.size.h, 18, 2); // Vertical position, Width, and Height of underline
     graphics_draw_rect(ctx, underline_rect);
 }
+
+// Initialize the default settings
+static void prv_default_settings() {
+    settings.color_background = GColorBlack;
+    settings.color_primary = GColorWhite;
+    settings.color_secondary = GColorLightGray;
+  }
+  
+  // Read settings from persistent storage
+  static void prv_load_settings() {
+    // Load the default settings
+    prv_default_settings();
+    // Read settings from persistent storage, if they exist
+    persist_read_data(SETTINGS_KEY, &settings, sizeof(settings));
+  }
+  
+  // Save the settings to persistent storage
+  static void prv_save_settings() {
+    persist_write_data(SETTINGS_KEY, &settings, sizeof(settings));
+    // Update the display based on new settings
+    prv_update_display();
+  }
 
 static void update_time() {
     time_t temp = time(NULL);
@@ -56,6 +83,48 @@ static void update_time() {
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
     update_time();
 }
+
+// Update the display elements
+static void prv_update_display() {
+
+    // Mark the underline layer dirty
+    layer_mark_dirty(s_underline_layer);
+
+    text_layer_set_text_color(s_time_layer, settings.color_primary);
+    text_layer_set_text_color(s_date_layer, settings.color_secondary);
+    for (int i = 0; i < 7; i++) {
+        text_layer_set_text_color(s_week_layers[i], settings.color_secondary);
+    }
+
+    layer_mark_dirty(text_layer_get_layer(s_time_layer));
+    layer_mark_dirty(text_layer_get_layer(s_date_layer));
+    for (int i = 0; i < 7; i++) {
+        layer_mark_dirty(text_layer_get_layer(s_week_layers[i]));
+    }
+    window_set_background_color(s_main_window, settings.color_background);
+
+}
+
+// Handle the response from AppMessage
+static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) {
+
+    // Colors
+    Tuple *color_background_t = dict_find(iter, MESSAGE_KEY_backgroundColor);
+    if (color_background_t) {
+      settings.color_background = GColorFromHEX(color_background_t->value->int32);
+    }
+    Tuple *color_primary_t = dict_find(iter, MESSAGE_KEY_primaryColor);
+    if (color_primary_t) {
+      settings.color_primary = GColorFromHEX(color_primary_t->value->int32);
+    }
+    Tuple *color_secondary_t = dict_find(iter, MESSAGE_KEY_secondaryColor);
+    if (color_secondary_t) {
+      settings.color_secondary = GColorFromHEX(color_secondary_t->value->int32);
+    }
+  
+    // Save the new settings to persistent storage
+    prv_save_settings();
+  }
 
 static void unobstructed_will_change(GRect final_unobstructed_screen_area, void *context) {
     // Handle changes before the unobstructed area changes
@@ -102,7 +171,7 @@ static void main_window_load(Window *window) {
     GRect bounds = layer_get_unobstructed_bounds(window_layer);
 
     // Set window background color to black
-    window_set_background_color(window, GColorBlack);
+    window_set_background_color(window, settings.color_background);
 
     // Time Layer
     int time_layer_height = 50;
@@ -111,7 +180,7 @@ static void main_window_load(Window *window) {
     text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_LECO_42_NUMBERS));
     text_layer_set_text_alignment(s_time_layer, GTextAlignmentRight);
     text_layer_set_background_color(s_time_layer, GColorClear);
-    text_layer_set_text_color(s_time_layer, GColorWhite); // Change text color to white
+    text_layer_set_text_color(s_time_layer, settings.color_primary); // Change text color to white
     layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
 
     // Date Layer
@@ -121,7 +190,7 @@ static void main_window_load(Window *window) {
     text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
     text_layer_set_text_alignment(s_date_layer, GTextAlignmentRight);
     text_layer_set_background_color(s_date_layer, GColorClear);
-    text_layer_set_text_color(s_date_layer, GColorWhite); // Change text color to white
+    text_layer_set_text_color(s_date_layer, settings.color_secondary); // Change text color to white
     layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
 
     // Weekday Layers
@@ -132,7 +201,7 @@ static void main_window_load(Window *window) {
         text_layer_set_font(s_week_layers[i], fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
         text_layer_set_text_alignment(s_week_layers[i], GTextAlignmentCenter);
         text_layer_set_background_color(s_week_layers[i], GColorClear);
-        text_layer_set_text_color(s_week_layers[i], GColorWhite); // Change text color to white
+        text_layer_set_text_color(s_week_layers[i], settings.color_secondary); // Change text color to white
         text_layer_set_text(s_week_layers[i], weekdays[i]);
         layer_add_child(window_layer, text_layer_get_layer(s_week_layers[i]));
     }
@@ -155,6 +224,12 @@ static void main_window_unload(Window *window) {
 }
 
 static void init() {
+    prv_load_settings();
+
+    // Listen for AppMessages
+    app_message_register_inbox_received(prv_inbox_received_handler);
+    app_message_open(128, 128);
+    
     s_main_window = window_create();
     window_set_window_handlers(s_main_window, (WindowHandlers) {
         .load = main_window_load,
