@@ -26,6 +26,7 @@ module.exports = [
         "messageKey": "primaryColor",
         "defaultValue": "0000ff",
         "label": "Time",
+        "allowGray": "true",
       },
 
       {
@@ -33,6 +34,7 @@ module.exports = [
         "messageKey": "secondaryColor",
         "defaultValue": "00ff00",
         "label": "Date and Day",
+        "allowGray": "true",
       }
     ]
   },

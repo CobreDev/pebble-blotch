@@ -30,22 +30,22 @@ static void prv_default_settings() {
     settings.color_background = GColorBlack;
     settings.color_primary = GColorWhite;
     settings.color_secondary = GColorLightGray;
-  }
-  
-  // Read settings from persistent storage
-  static void prv_load_settings() {
+}
+
+// Read settings from persistent storage
+static void prv_load_settings() {
     // Load the default settings
     prv_default_settings();
     // Read settings from persistent storage, if they exist
     persist_read_data(SETTINGS_KEY, &settings, sizeof(settings));
-  }
-  
-  // Save the settings to persistent storage
-  static void prv_save_settings() {
+}
+
+// Save the settings to persistent storage
+static void prv_save_settings() {
     persist_write_data(SETTINGS_KEY, &settings, sizeof(settings));
     // Update the display based on new settings
     prv_update_display();
-  }
+}
 
 static void update_time() {
     time_t temp = time(NULL);
@@ -86,45 +86,38 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 
 // Update the display elements
 static void prv_update_display() {
-
-    // Mark the underline layer dirty
-    layer_mark_dirty(s_underline_layer);
-
     text_layer_set_text_color(s_time_layer, settings.color_primary);
     text_layer_set_text_color(s_date_layer, settings.color_secondary);
     for (int i = 0; i < 7; i++) {
         text_layer_set_text_color(s_week_layers[i], settings.color_secondary);
+        layer_mark_dirty(text_layer_get_layer(s_week_layers[i]));
     }
 
     layer_mark_dirty(text_layer_get_layer(s_time_layer));
     layer_mark_dirty(text_layer_get_layer(s_date_layer));
-    for (int i = 0; i < 7; i++) {
-        layer_mark_dirty(text_layer_get_layer(s_week_layers[i]));
-    }
+    layer_mark_dirty(s_underline_layer);
     window_set_background_color(s_main_window, settings.color_background);
-
 }
 
 // Handle the response from AppMessage
 static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) {
-
     // Colors
     Tuple *color_background_t = dict_find(iter, MESSAGE_KEY_backgroundColor);
     if (color_background_t) {
-      settings.color_background = GColorFromHEX(color_background_t->value->int32);
+        settings.color_background = GColorFromHEX(color_background_t->value->int32);
     }
     Tuple *color_primary_t = dict_find(iter, MESSAGE_KEY_primaryColor);
     if (color_primary_t) {
-      settings.color_primary = GColorFromHEX(color_primary_t->value->int32);
+        settings.color_primary = GColorFromHEX(color_primary_t->value->int32);
     }
     Tuple *color_secondary_t = dict_find(iter, MESSAGE_KEY_secondaryColor);
     if (color_secondary_t) {
-      settings.color_secondary = GColorFromHEX(color_secondary_t->value->int32);
+        settings.color_secondary = GColorFromHEX(color_secondary_t->value->int32);
     }
-  
+
     // Save the new settings to persistent storage
     prv_save_settings();
-  }
+}
 
 static void unobstructed_will_change(GRect final_unobstructed_screen_area, void *context) {
     // Handle changes before the unobstructed area changes
