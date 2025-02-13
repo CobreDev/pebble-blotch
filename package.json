@@ -1,10 +1,14 @@
 {
-  "name": "blotch",
+  "name": "Blotch",
   "author": "cobre",
   "version": "1.0.0",
-  "keywords": ["pebble-app"],
+  "keywords": [
+    "Marked, Underline, Date, Day, Digital"
+  ],
   "private": true,
-  "dependencies": {},
+  "dependencies": {
+    "pebble-clay": "^1.0.4"
+  },
   "pebble": {
     "displayName": "blotch",
     "uuid": "e03ca915-a42b-475e-b404-f5cf56f0d3c4",
@@ -19,8 +23,13 @@
     "watchapp": {
       "watchface": true
     },
+    "capabilities": [
+      "configurable"
+    ],
     "messageKeys": [
-      "dummy"
+      "backgroundColor",
+      "primaryColor",
+      "secondaryColor"
     ],
     "resources": {
       "media": []
