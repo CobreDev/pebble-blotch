@@ -32,7 +32,14 @@
       "secondaryColor"
     ],
     "resources": {
-      "media": []
+      "media": [
+        {
+          "file": "images/menuicon.png",
+          "menuIcon": true,
+          "name": "MENU_ICON",
+          "type": "bitmap"
+        }
+      ]
     }
   }
 }

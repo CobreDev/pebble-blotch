@@ -47,6 +47,24 @@ static void prv_save_settings() {
     prv_update_display();
 }
 
+///////////////////////////
+////// DEMO SETTINGS //////
+///////////////////////////
+
+// static void update_time() {
+//     // Temporarily set the time to "10:10"
+//     static char time_buffer[6] = "10:10";
+//     static char date_buffer[12] = "July 17";
+
+//     text_layer_set_text(s_time_layer, time_buffer);
+//     text_layer_set_text(s_date_layer, date_buffer);
+
+//     // Set the current day index to Sunday (0)
+//     s_current_day_index = 0;
+//     // Trigger redraw of the underline
+//     layer_mark_dirty(s_underline_layer);
+// }
+
 static void update_time() {
     time_t temp = time(NULL);
     struct tm *tick_time = localtime(&temp);
