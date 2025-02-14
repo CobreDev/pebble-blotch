@@ -1,5 +1,4 @@
 #pragma once
-#include <pebble.h>
 
 #define SETTINGS_KEY 8642
 

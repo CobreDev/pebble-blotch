@@ -4,7 +4,6 @@ module.exports = [
     "type": "heading",
     "defaultValue": "Blotch"
   },
-
   {
     "type": "section",
     "items": [
@@ -16,26 +15,25 @@ module.exports = [
       {
       "type": "color",
       "messageKey": "backgroundColor",
-      "defaultValue": "ff0000",
+      "defaultValue": "001E41",
       "label": "Background",
       },
 
       {
         "type": "color",
         "messageKey": "primaryColor",
-        "defaultValue": "0000ff",
+        "defaultValue": "ffffff",
         "label": "Time",
       },
 
       {
         "type": "color",
         "messageKey": "secondaryColor",
-        "defaultValue": "00ff00",
+        "defaultValue": "ABABAB",
         "label": "Date and Day",
       }
     ]
   },
-
   {
     "type": "submit",
     "defaultValue": "Save Settings"

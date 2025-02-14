@@ -15,13 +15,15 @@ static const char *weekdays[] = {"S", "M", "T", "W", "T", "F", "S"};
 static const int underline_positions[] = {10, 28, 46, 64, 82, 100, 118}; // x-coordinates for each day
 
 static void underline_layer_update_proc(Layer *layer, GContext *ctx) {
+    // Draw the underline
     graphics_context_set_stroke_width(ctx, 3);
     graphics_context_set_stroke_color(ctx, settings.color_secondary); // Change underline color to white
     
     // Calculate the x position based on the current day index
     GRect day_bounds = layer_get_frame(text_layer_get_layer(s_week_layers[s_current_day_index]));
-    int x_position = day_bounds.origin.x + (day_bounds.size.w / 2) - 9; // Center the underline within the text layer
-    GRect underline_rect = GRect(x_position, day_bounds.origin.y + day_bounds.size.h, 18, 2); // Vertical position, Width, and Height of underline
+    int underline_width = PBL_IF_ROUND_ELSE(12, 18);
+    int x_position = day_bounds.origin.x + (day_bounds.size.w / 2) - (underline_width / 2); // Center the underline within the text layer
+    GRect underline_rect = GRect(x_position, day_bounds.origin.y + day_bounds.size.h, underline_width, 2); // Vertical position, Width, and Height of underline
     graphics_draw_rect(ctx, underline_rect);
 }
 
@@ -64,6 +66,10 @@ static void prv_save_settings() {
 //     // Trigger redraw of the underline
 //     layer_mark_dirty(s_underline_layer);
 // }
+
+/////////////////////////////////
+////// PRODUCTION SETTINGS //////
+/////////////////////////////////
 
 static void update_time() {
     time_t temp = time(NULL);
@@ -119,22 +125,38 @@ static void prv_update_display() {
 
 // Handle the response from AppMessage
 static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) {
+    bool settings_changed = false;
+
     // Colors
     Tuple *color_background_t = dict_find(iter, MESSAGE_KEY_backgroundColor);
     if (color_background_t) {
-        settings.color_background = GColorFromHEX(color_background_t->value->int32);
+        GColor new_color = GColorFromHEX(color_background_t->value->int32);
+        if (!gcolor_equal(settings.color_background, new_color)) {
+            settings.color_background = new_color;
+            settings_changed = true;
+        }
     }
     Tuple *color_primary_t = dict_find(iter, MESSAGE_KEY_primaryColor);
     if (color_primary_t) {
-        settings.color_primary = GColorFromHEX(color_primary_t->value->int32);
+        GColor new_color = GColorFromHEX(color_primary_t->value->int32);
+        if (!gcolor_equal(settings.color_primary, new_color)) {
+            settings.color_primary = new_color;
+            settings_changed = true;
+        }
     }
     Tuple *color_secondary_t = dict_find(iter, MESSAGE_KEY_secondaryColor);
     if (color_secondary_t) {
-        settings.color_secondary = GColorFromHEX(color_secondary_t->value->int32);
+        GColor new_color = GColorFromHEX(color_secondary_t->value->int32);
+        if (!gcolor_equal(settings.color_secondary, new_color)) {
+            settings.color_secondary = new_color;
+            settings_changed = true;
+        }
     }
 
-    // Save the new settings to persistent storage
-    prv_save_settings();
+    // Save the new settings to persistent storage if they have changed
+    if (settings_changed) {
+        prv_save_settings();
+    }
 }
 
 static void unobstructed_will_change(GRect final_unobstructed_screen_area, void *context) {
@@ -164,10 +186,10 @@ static void unobstructed_did_change(void *context) {
     layer_set_frame(text_layer_get_layer(s_date_layer), GRect(0, date_layer_y, bounds.size.w - 10, date_layer_height));
 
     // Weekday Layers
-    int day_layer_height = 30;
-    int day_layer_y = time_layer_y + time_layer_height + (bounds.size.h - (time_layer_y + time_layer_height) - day_layer_height) / 8;
+    int week_layer_height = 30;
+    int week_layer_y = time_layer_y + time_layer_height + (bounds.size.h - (time_layer_y + time_layer_height) - week_layer_height) / 8;
     for (int i = 0; i < 7; i++) {
-        layer_set_frame(text_layer_get_layer(s_week_layers[i]), GRect(10 + i * 18, day_layer_y, 20, day_layer_height));
+        layer_set_frame(text_layer_get_layer(s_week_layers[i]), GRect(10 + i * 18, week_layer_y, 20, week_layer_height));
     }
 
     // Underline Layer
@@ -175,6 +197,14 @@ static void unobstructed_did_change(void *context) {
 
     // Redraw the underline
     layer_mark_dirty(s_underline_layer);
+}
+
+static void configure_text_layer(TextLayer *layer, GRect frame, GFont font, GTextAlignment alignment, GColor background_color, GColor text_color) {
+    text_layer_set_font(layer, font);
+    text_layer_set_text_alignment(layer, alignment);
+    text_layer_set_background_color(layer, background_color);
+    text_layer_set_text_color(layer, text_color);
+    layer_set_frame(text_layer_get_layer(layer), frame);
 }
 
 static void main_window_load(Window *window) {
@@ -187,32 +217,26 @@ static void main_window_load(Window *window) {
     // Time Layer
     int time_layer_height = 50;
     int time_layer_y = (bounds.size.h - time_layer_height) / 2;
-    s_time_layer = text_layer_create(GRect(0, time_layer_y, bounds.size.w - 10, time_layer_height)); // Vertically centered
-    text_layer_set_font(s_time_layer, fonts_get_system_font(FONT_KEY_LECO_42_NUMBERS));
-    text_layer_set_text_alignment(s_time_layer, GTextAlignmentRight);
-    text_layer_set_background_color(s_time_layer, GColorClear);
-    text_layer_set_text_color(s_time_layer, settings.color_primary); // Change text color to white
+    s_time_layer = text_layer_create(GRect(0, time_layer_y, bounds.size.w - 10, time_layer_height));
+    configure_text_layer(s_time_layer, GRect(0, time_layer_y, bounds.size.w - 10, time_layer_height), fonts_get_system_font(FONT_KEY_LECO_42_NUMBERS), GTextAlignmentRight, GColorClear, settings.color_primary);
     layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
 
     // Date Layer
     int date_layer_height = 30;
     int date_layer_y = (time_layer_y - date_layer_height) / 1;
-    s_date_layer = text_layer_create(GRect(0, date_layer_y, bounds.size.w - 10, date_layer_height)); // Centered between top and time layer
-    text_layer_set_font(s_date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
-    text_layer_set_text_alignment(s_date_layer, GTextAlignmentRight);
-    text_layer_set_background_color(s_date_layer, GColorClear);
-    text_layer_set_text_color(s_date_layer, settings.color_secondary); // Change text color to white
+    s_date_layer = text_layer_create(GRect(0, date_layer_y, bounds.size.w - PBL_IF_ROUND_ELSE(25, 10), date_layer_height));
+    configure_text_layer(s_date_layer, GRect(0, date_layer_y, bounds.size.w - PBL_IF_ROUND_ELSE(25, 10), date_layer_height), fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD), GTextAlignmentRight, GColorClear, settings.color_secondary);
     layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
 
     // Weekday Layers
-    int day_layer_height = 30;
-    int day_layer_y = time_layer_y + time_layer_height + (bounds.size.h - (time_layer_y + time_layer_height) - day_layer_height) / 8;
+    int week_layer_height = 30;
+    int week_layer_y = time_layer_y + time_layer_height + (bounds.size.h - (time_layer_y + time_layer_height) - week_layer_height) / 8;
+    int total_weekdays_width = 7 * PBL_IF_ROUND_ELSE(17, 18);
+    int start_x = (bounds.size.w - total_weekdays_width) / 2; // Center the weekday layers horizontally
+
     for (int i = 0; i < 7; i++) {
-        s_week_layers[i] = text_layer_create(GRect(10 + i * 18, day_layer_y, 20, day_layer_height)); // Centered between bottom and time layer
-        text_layer_set_font(s_week_layers[i], fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD));
-        text_layer_set_text_alignment(s_week_layers[i], GTextAlignmentCenter);
-        text_layer_set_background_color(s_week_layers[i], GColorClear);
-        text_layer_set_text_color(s_week_layers[i], settings.color_secondary); // Change text color to white
+        s_week_layers[i] = text_layer_create(GRect(start_x + i * (PBL_IF_ROUND_ELSE(17, 18)), week_layer_y, 20, week_layer_height));
+        configure_text_layer(s_week_layers[i], GRect(start_x + i * (PBL_IF_ROUND_ELSE(17, 18)), week_layer_y, 20, week_layer_height), fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD), GTextAlignmentCenter, GColorClear, settings.color_secondary);
         text_layer_set_text(s_week_layers[i], weekdays[i]);
         layer_add_child(window_layer, text_layer_get_layer(s_week_layers[i]));
     }
