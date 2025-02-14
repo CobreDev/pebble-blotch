@@ -20,3 +20,4 @@ Want to try it out? You can install it now from the [Rebble store](https://apps.
 - [ ] Customizable fonts
 - [ ] Separate date and week color customization
 - [ ] Week starting day customization
+- [ ] Adjustable underline size
