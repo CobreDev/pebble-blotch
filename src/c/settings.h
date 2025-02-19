@@ -8,8 +8,10 @@
 typedef struct ClaySettings {
   
   GColor color_background;
-  GColor color_primary;
-  GColor color_secondary;
+  GColor color_time;
+  GColor color_date;
+  GColor color_week;
+  GColor color_underline;
 
 } __attribute__((__packed__)) ClaySettings;
 

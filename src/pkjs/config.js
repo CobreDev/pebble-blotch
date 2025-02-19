@@ -21,16 +21,30 @@ module.exports = [
 
       {
         "type": "color",
-        "messageKey": "primaryColor",
+        "messageKey": "timeColor",
         "defaultValue": "ffffff",
         "label": "Time",
       },
 
       {
         "type": "color",
-        "messageKey": "secondaryColor",
+        "messageKey": "dateColor",
         "defaultValue": "ABABAB",
-        "label": "Date and Day",
+        "label": "Date",
+      },
+
+      {
+        "type": "color",
+        "messageKey": "weekColor",
+        "defaultValue": "ABABAB",
+        "label": "Week",
+      },
+
+      {
+        "type": "color",
+        "messageKey": "underlineColor",
+        "defaultValue": "ABABAB",
+        "label": "Underline",
       }
     ]
   },

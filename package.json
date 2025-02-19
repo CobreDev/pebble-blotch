@@ -1,7 +1,7 @@
 {
   "name": "Blotch",
   "author": "cobre",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "keywords": [
     "Marked, Underline, Date, Day, Digital"
   ],
@@ -28,8 +28,10 @@
     ],
     "messageKeys": [
       "backgroundColor",
-      "primaryColor",
-      "secondaryColor"
+      "timeColor",
+      "dateColor",
+      "weekColor",
+      "underlineColor"
     ],
     "resources": {
       "media": [
