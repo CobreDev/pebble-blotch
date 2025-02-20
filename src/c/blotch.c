@@ -16,7 +16,7 @@ static const int underline_positions[] = {10, 28, 46, 64, 82, 100, 118}; // x-co
 static void underline_layer_update_proc(Layer *layer, GContext *ctx) {
     // Draw the underline
     graphics_context_set_stroke_width(ctx, 3);
-    graphics_context_set_stroke_color(ctx, settings.color_underline); // Change underline color to white
+    graphics_context_set_stroke_color(ctx, settings.color_highlight); // Change underline color to white
     
     // Calculate the x position based on the current day index
     GRect day_bounds = layer_get_frame(text_layer_get_layer(s_week_layers[s_current_day_index]));
@@ -28,10 +28,11 @@ static void underline_layer_update_proc(Layer *layer, GContext *ctx) {
 
 // Initialize the default settings
 static void prv_default_settings() {
-    settings.color_background = GColorBlack;
+    settings.color_background = GColorOxfordBlue;
     settings.color_time = GColorWhite;
     settings.color_date = GColorLightGray;
     settings.color_week = GColorLightGray;
+    settings.color_highlight = GColorWhite; // Set the default highlight color
 }
 
 // Read settings from persistent storage
@@ -99,8 +100,9 @@ static void update_time() {
     int new_day_index = tick_time->tm_wday; // Sunday = 0, Saturday = 6
     if (s_current_day_index != new_day_index) {
         s_current_day_index = new_day_index;
-        // Trigger redraw of the underline
+        // Trigger redraw of the underline and update display
         layer_mark_dirty(s_underline_layer);
+        prv_update_display();
     }
 }
 
@@ -113,7 +115,11 @@ static void prv_update_display() {
     text_layer_set_text_color(s_time_layer, settings.color_time);
     text_layer_set_text_color(s_date_layer, settings.color_date);
     for (int i = 0; i < 7; i++) {
-        text_layer_set_text_color(s_week_layers[i], settings.color_week);
+        if (i == s_current_day_index) {
+            text_layer_set_text_color(s_week_layers[i], settings.color_highlight);
+        } else {
+            text_layer_set_text_color(s_week_layers[i], settings.color_week);
+        }
         layer_mark_dirty(text_layer_get_layer(s_week_layers[i]));
     }
 
@@ -160,11 +166,11 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
             settings_changed = true;
         }
     }
-    Tuple *color_underline_t = dict_find(iter, MESSAGE_KEY_underlineColor);
-    if (color_underline_t) {
-        GColor new_color = GColorFromHEX(color_underline_t->value->int32);
-        if (!gcolor_equal(settings.color_underline, new_color)) {
-            settings.color_underline = new_color;
+    Tuple *color_highlight_t = dict_find(iter, MESSAGE_KEY_highlightColor);
+    if (color_highlight_t) {
+        GColor new_color = GColorFromHEX(color_highlight_t->value->int32);
+        if (!gcolor_equal(settings.color_highlight, new_color)) {
+            settings.color_highlight = new_color;
             settings_changed = true;
         }
     }

@@ -1,4 +1,3 @@
-
 module.exports = [
   {
     "type": "heading",
@@ -13,38 +12,42 @@ module.exports = [
       },
 
       {
-      "type": "color",
-      "messageKey": "backgroundColor",
-      "defaultValue": "001E41",
-      "label": "Background",
+        "type": "color",
+        "messageKey": "backgroundColor",
+        "defaultValue": "0x000055",
+        "label": "Background Color",
       },
 
       {
         "type": "color",
         "messageKey": "timeColor",
-        "defaultValue": "ffffff",
-        "label": "Time",
+        "defaultValue": "0xFFFFFF",
+        "label": "Time Color",
+        "allowGray": true,
       },
 
       {
         "type": "color",
         "messageKey": "dateColor",
-        "defaultValue": "ABABAB",
-        "label": "Date",
+        "defaultValue": "0xAAAAAA",
+        "label": "Date Color",
+        "allowGray": true,
       },
 
       {
         "type": "color",
         "messageKey": "weekColor",
-        "defaultValue": "ABABAB",
-        "label": "Week",
+        "defaultValue": "0xAAAAAA",
+        "label": "Week Color",
+        "allowGray": true,
       },
 
       {
         "type": "color",
-        "messageKey": "underlineColor",
-        "defaultValue": "ABABAB",
-        "label": "Underline",
+        "messageKey": "highlightColor",
+        "defaultValue": "0xFFFFFF",
+        "label": "Highlight Color",
+        "allowGray": true,
       }
     ]
   },

@@ -11,7 +11,7 @@ typedef struct ClaySettings {
   GColor color_time;
   GColor color_date;
   GColor color_week;
-  GColor color_underline;
+  GColor color_highlight;
 
 } __attribute__((__packed__)) ClaySettings;
 
