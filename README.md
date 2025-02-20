@@ -7,7 +7,7 @@ A user on the Rebble discord posted recently that they loved the [Marked 2](http
 ![basalt-blue](./images/screenshots/basalt-blue.png)
 ![chalk-green](./images/screenshots/chalk-green.png)
 ![basalt-purple](./images/screenshots/basalt-purple.png)
-![chalk-red](./images/screenshots/chalk-red.png)
+![chalk-red](./images/screenshots/chalk-black.png)
 
 ### Download Link
 Want to try it out? You can install it now from the [Rebble store](https://apps.rebble.io/en_US/application/67ae29f70554c60009de76df)!

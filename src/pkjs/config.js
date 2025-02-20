@@ -23,7 +23,6 @@ module.exports = [
         "messageKey": "timeColor",
         "defaultValue": "0xFFFFFF",
         "label": "Time Color",
-        "allowGray": true,
       },
 
       {
@@ -31,7 +30,6 @@ module.exports = [
         "messageKey": "dateColor",
         "defaultValue": "0xAAAAAA",
         "label": "Date Color",
-        "allowGray": true,
       },
 
       {
@@ -39,7 +37,6 @@ module.exports = [
         "messageKey": "weekColor",
         "defaultValue": "0xAAAAAA",
         "label": "Week Color",
-        "allowGray": true,
       },
 
       {
@@ -47,7 +44,7 @@ module.exports = [
         "messageKey": "highlightColor",
         "defaultValue": "0xFFFFFF",
         "label": "Highlight Color",
-        "allowGray": true,
+        "capabilities": ["COLOR"],
       }
     ]
   },
