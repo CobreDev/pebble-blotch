@@ -209,7 +209,10 @@ static void unobstructed_did_change(void *context) {
 
     int date_layer_height = 30;
     int date_layer_y = (time_layer_y - date_layer_height) / 1;
-    layer_set_frame(text_layer_get_layer(s_date_layer), GRect(0, date_layer_y, bounds.size.w - 10, date_layer_height));
+    layer_set_frame(text_layer_get_layer(s_date_layer), GRect(0, date_layer_y, bounds.size.w - PBL_IF_ROUND_ELSE(25, 10) - 20, date_layer_height));
+
+    // Adjust the position of the date suffix layer
+    layer_set_frame(text_layer_get_layer(s_date_suffix_layer), GRect(bounds.size.w - PBL_IF_ROUND_ELSE(25, 10) - 20, date_layer_y, 20, date_layer_height));
 
     int week_layer_height = 30;
     int week_layer_y = time_layer_y + time_layer_height + (bounds.size.h - (time_layer_y + time_layer_height) - week_layer_height) / 8;
