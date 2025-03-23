@@ -1,7 +1,7 @@
 {
   "name": "Blotch",
   "author": "cobre",
-  "version": "1.4.0",
+  "version": "1.5.0",
   "keywords": [
     "Marked, Underline, Date, Day, Digital"
   ],
@@ -18,7 +18,8 @@
       "aplite",
       "basalt",
       "chalk",
-      "diorite"
+      "diorite",
+      "emery"
     ],
     "watchapp": {
       "watchface": true
@@ -31,7 +32,8 @@
       "timeColor",
       "dateColor",
       "weekColor",
-      "highlightColor"
+      "highlightColor",
+      "timeFont"
     ],
     "resources": {
       "media": [
@@ -40,6 +42,12 @@
           "menuIcon": true,
           "name": "MENU_ICON",
           "type": "bitmap"
+        },
+        {
+          "characterRegex": "[0-9:A-Za-z ]",
+          "type": "font",
+          "name": "DroidSerif_42",
+          "file": "fonts/DroidSerif.ttf"
         }
       ]
     }

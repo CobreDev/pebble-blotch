@@ -12,6 +12,7 @@ typedef struct ClaySettings {
   GColor color_date;
   GColor color_week;
   GColor color_highlight;
+  int timeFont; // 1 = LECO, 2 = Bitham Bold, 3 = Bitham Light
 
 } __attribute__((__packed__)) ClaySettings;
 
