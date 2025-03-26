@@ -16,7 +16,9 @@ static int s_current_day_index = -1;
 ClaySettings settings;
 
 static const char *weekdays[] = {"S", "M", "T", "W", "T", "F", "S"};
-  
+
+static GFont get_font_for_selection(int font_selection);
+
 static void underline_layer_update_proc(Layer *layer, GContext *ctx) {
     graphics_context_set_stroke_width(ctx, 3);
     graphics_context_set_stroke_color(ctx, settings.color_highlight);
@@ -213,6 +215,7 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
     }
     if (settings_changed) {
         prv_save_settings();
+        prv_update_display(); // Ensure the display is updated after settings change
     }
 }
 
