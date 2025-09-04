@@ -102,7 +102,7 @@ static void update_time() {
     time_t temp = time(NULL);
     struct tm *tick_time = localtime(&temp);
 
-    static char time_buffer[6], date_buffer[12], date_suffix_buffer[3], month_buffer[10];
+    static char time_buffer[6], date_buffer[12], date_suffix_buffer[3], month_buffer[12];
     static int last_hour = -1, last_minute = -1, last_day = -1;
 
     if (last_hour != tick_time->tm_hour || last_minute != tick_time->tm_min) {
@@ -113,12 +113,18 @@ static void update_time() {
     }
 
     if (last_day != tick_time->tm_mday) {
-        strftime(date_buffer, sizeof(date_buffer), "%B %d", tick_time);
-        snprintf(month_buffer, sizeof(month_buffer), "%.*s ", (int)(strlen(date_buffer) - 3), date_buffer);
-        snprintf(date_suffix_buffer, sizeof(date_suffix_buffer), "%s", &date_buffer[strlen(date_buffer) - 2]);
+        // Get full month name separately
+        strftime(month_buffer, sizeof(month_buffer), "%B", tick_time);
 
-        text_layer_set_text(s_date_layer, month_buffer);
+        // Get day of month separately
+        strftime(date_suffix_buffer, sizeof(date_suffix_buffer), "%d", tick_time);
+
+        // Add a space at the end of the month for spacing before the day
+        snprintf(date_buffer, sizeof(date_buffer), "%s ", month_buffer);
+
+        text_layer_set_text(s_date_layer, date_buffer);
         text_layer_set_text(s_date_suffix_layer, date_suffix_buffer);
+
         last_day = tick_time->tm_mday;
     }
 
