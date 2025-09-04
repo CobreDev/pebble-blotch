@@ -113,19 +113,29 @@ static void update_time() {
     }
 
     if (last_day != tick_time->tm_mday) {
-        // Get full month name separately
+        // Get month name
         strftime(month_buffer, sizeof(month_buffer), "%B", tick_time);
 
-        // Get day of month separately
-        strftime(date_suffix_buffer, sizeof(date_suffix_buffer), "%d", tick_time);
+        // Get day as integer (no leading zero)
+        int day = tick_time->tm_mday;
+        snprintf(date_suffix_buffer, sizeof(date_suffix_buffer), "%d", day);
 
-        // Add a space at the end of the month for spacing before the day
+        // Update month text layer
         snprintf(date_buffer, sizeof(date_buffer), "%s ", month_buffer);
-
         text_layer_set_text(s_date_layer, date_buffer);
         text_layer_set_text(s_date_suffix_layer, date_suffix_buffer);
 
-        last_day = tick_time->tm_mday;
+        // Dynamically adjust month layer width so day fits
+        int day_width = (day < 10) ? 10 : 20; // tweak these values for your font
+        GRect bounds = layer_get_unobstructed_bounds(window_get_root_layer(s_main_window));
+        int date_layer_y = layer_get_frame(text_layer_get_layer(s_date_layer)).origin.y;
+
+        layer_set_frame(text_layer_get_layer(s_date_layer),
+                        GRect(0, date_layer_y, bounds.size.w - PBL_IF_ROUND_ELSE(25, 10) - day_width, DATE_LAYER_HEIGHT));
+        layer_set_frame(text_layer_get_layer(s_date_suffix_layer),
+                        GRect(bounds.size.w - PBL_IF_ROUND_ELSE(25, 10) - day_width, date_layer_y, day_width, DATE_LAYER_HEIGHT));
+
+        last_day = day;
     }
 
     int new_day_index = tick_time->tm_wday;
