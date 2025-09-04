@@ -18,6 +18,9 @@ Want to try it out? You can install it now from the [Rebble store](https://apps.
 - [x] PTR Support
 - [x] Add images
 - [ ] Customizable fonts
+    - LECO
+    - Bitham Bold
+    - Bitham Light
 - [ ] Battery percentage
 - [x] Separate date and week color customization
 - [ ] Week starting day customization
