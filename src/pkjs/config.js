@@ -44,7 +44,6 @@ module.exports = [
         "messageKey": "highlightColor",
         "defaultValue": "0xFFFFFF",
         "label": "Highlight Color",
-        "capabilities": ["COLOR"],
       }
     ]
   },
