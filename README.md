@@ -11,18 +11,11 @@ Version 2.0 uses scalable fonts via [pebble-fctx](https://github.com/jrmobley/pe
 - **LECO 1976** - time display
 
 ## Screenshots
-
-### Emery (228px)
-
-| Blue | Black | Green | Purple | White |
-|------|-------|-------|--------|-------|
-| ![Blue](./images/screenshots/emery-blue.png) | ![Black](./images/screenshots/emery-black.png) | ![Green](./images/screenshots/emery-gree.png) | ![Purple](./images/screenshots/emery-purple.png) | ![White](./images/screenshots/emery-white.png) |
-
-### Gabbro (228px round)
-
-| Blue | Black | Green | Purple | White |
-|------|-------|-------|--------|-------|
-| ![Blue](./images/screenshots/gabbro-blue.png) | ![Black](./images/screenshots/gabbro-black.png) | ![Green](./images/screenshots/gabbro-green.png) | ![Purple](./images/screenshots/gabbro-purple.png) | ![White](./images/screenshots/gabbro-white.png) |
+![Blue](./images/screenshots/emery-blue.png)
+![Black](./images/screenshots/gabbro-black.png)
+![Green](./images/screenshots/emery-gree.png)
+![Purple](./images/screenshots/gabbro-purple.png)
+![White](./images/screenshots/emery-white.png)
 
 ### Download Link
 Want to try it out? You can install it now from the [Rebble store](https://apps.rebble.io/en_US/application/67ae29f70554c60009de76df)!
