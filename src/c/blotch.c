@@ -26,6 +26,7 @@ static const struct {
     { .background = GColorImperialPurple, .time = GColorMediumSpringGreen, .date = GColorJaegerGreen, .week = GColorJaegerGreen, .highlight = GColorSunsetOrange },
     { .background = GColorBlack, .time = GColorSunsetOrange, .date = GColorMelon, .week = GColorMelon, .highlight = GColorJaegerGreen },
     { .background = GColorWhite, .time = GColorBlack, .date = GColorBlack, .week = GColorBlack, .highlight = GColorBlack },
+    { .background = GColorBlack, .time = GColorWhite, .date = GColorWhite, .week = GColorWhite, .highlight = GColorWhite },
 };
 #endif
 
