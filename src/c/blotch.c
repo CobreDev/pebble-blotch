@@ -61,8 +61,12 @@ static void calculate_sizes(int height) {
 }
 
 static void canvas_update_proc(Layer *layer, GContext *ctx) {
-    GRect bounds = layer_get_unobstructed_bounds(layer);
-    calculate_sizes(bounds.size.h);
+    GRect full_bounds = layer_get_bounds(layer);
+    GRect unobstructed_bounds = layer_get_unobstructed_bounds(layer);
+    calculate_sizes(full_bounds.size.h);
+
+    int y_offset = unobstructed_bounds.origin.y - full_bounds.origin.y;
+    int available_height = unobstructed_bounds.size.h;
 
     FContext fctx;
     fctx_init_context(&fctx, ctx);
@@ -73,7 +77,7 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
 #endif
 
 #if SCREENSHOT_MODE
-    int time_layer_y = (bounds.size.h - s_time_font_size) / 2;
+    int time_layer_y = y_offset + (available_height - s_time_font_size) / 2;
 
     static char time_buffer[6];
     snprintf(time_buffer, sizeof(time_buffer), "10:10");
@@ -82,14 +86,14 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
     fctx_set_fill_color(&fctx, settings.color_time);
     fctx_set_text_em_height(&fctx, s_font_leco, s_time_font_size);
     FPoint time_pos;
-    time_pos.x = INT_TO_FIXED(bounds.size.w - (PBL_IF_ROUND_ELSE(15, 10) * bounds.size.w) / 144);
+    time_pos.x = INT_TO_FIXED(full_bounds.size.w - (PBL_IF_ROUND_ELSE(15, 10) * full_bounds.size.w) / 144);
     time_pos.y = INT_TO_FIXED(time_layer_y + s_time_font_size / 2);
     fctx_set_offset(&fctx, time_pos);
     fctx_draw_string(&fctx, time_buffer, s_font_leco, GTextAlignmentRight, FTextAnchorMiddle);
     fctx_end_fill(&fctx);
 
     int date_layer_y = time_layer_y - s_date_font_size - 5;
-    int date_offset = (PBL_IF_ROUND_ELSE(25, 10) * bounds.size.w) / 144;
+    int date_offset = (PBL_IF_ROUND_ELSE(25, 10) * full_bounds.size.w) / 144;
 
     snprintf(s_month_buffer, sizeof(s_month_buffer), "July");
     snprintf(s_day_buffer, sizeof(s_day_buffer), "17");
@@ -98,7 +102,7 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
     time_t temp = time(NULL);
     struct tm *tick_time = localtime(&temp);
 
-    int time_layer_y = (bounds.size.h - s_time_font_size) / 2;
+    int time_layer_y = y_offset + (available_height - s_time_font_size) / 2;
 
     static char time_buffer[6];
     strftime(time_buffer, sizeof(time_buffer), clock_is_24h_style() ? "%H:%M" : "%l:%M", tick_time);
@@ -107,21 +111,21 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
     fctx_set_fill_color(&fctx, settings.color_time);
     fctx_set_text_em_height(&fctx, s_font_leco, s_time_font_size);
     FPoint time_pos;
-    time_pos.x = INT_TO_FIXED(bounds.size.w - (PBL_IF_ROUND_ELSE(15, 10) * bounds.size.w) / 144);
+    time_pos.x = INT_TO_FIXED(full_bounds.size.w - (PBL_IF_ROUND_ELSE(15, 10) * full_bounds.size.w) / 144);
     time_pos.y = INT_TO_FIXED(time_layer_y + s_time_font_size / 2);
     fctx_set_offset(&fctx, time_pos);
     fctx_draw_string(&fctx, time_buffer, s_font_leco, GTextAlignmentRight, FTextAnchorMiddle);
     fctx_end_fill(&fctx);
 
     int date_layer_y = time_layer_y - s_date_font_size - 5;
-    int date_offset = (PBL_IF_ROUND_ELSE(25, 10) * bounds.size.w) / 144;
+    int date_offset = (PBL_IF_ROUND_ELSE(25, 10) * full_bounds.size.w) / 144;
 #endif
 
     fctx_begin_fill(&fctx);
     fctx_set_fill_color(&fctx, settings.color_date);
     fctx_set_text_em_height(&fctx, s_font_oswald, s_date_font_size);
     FPoint month_pos;
-    month_pos.x = INT_TO_FIXED(bounds.size.w - date_offset - (PBL_IF_ROUND_ELSE(23, 28) * bounds.size.w) / 144);
+    month_pos.x = INT_TO_FIXED(full_bounds.size.w - date_offset - (PBL_IF_ROUND_ELSE(23, 28) * full_bounds.size.w) / 144);
     month_pos.y = INT_TO_FIXED(date_layer_y + s_date_font_size / 2);
     fctx_set_offset(&fctx, month_pos);
     fctx_draw_string(&fctx, s_month_buffer, s_font_oswald, GTextAlignmentRight, FTextAnchorMiddle);
@@ -131,15 +135,15 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
     fctx_set_fill_color(&fctx, settings.color_highlight);
     fctx_set_text_em_height(&fctx, s_font_oswald, s_date_font_size);
     FPoint day_pos;
-    day_pos.x = INT_TO_FIXED(bounds.size.w - date_offset);
+    day_pos.x = INT_TO_FIXED(full_bounds.size.w - date_offset);
     day_pos.y = INT_TO_FIXED(date_layer_y + s_date_font_size / 2);
     fctx_set_offset(&fctx, day_pos);
     fctx_draw_string(&fctx, s_day_buffer, s_font_oswald, GTextAlignmentRight, FTextAnchorMiddle);
     fctx_end_fill(&fctx);
 
-    int week_layer_y = time_layer_y + s_time_font_size + (bounds.size.h - (time_layer_y + s_time_font_size) - s_week_font_size) / 8;
+    int week_layer_y = time_layer_y + s_time_font_size + (available_height - (time_layer_y - y_offset + s_time_font_size) - s_week_font_size) / 8;
     int total_weekdays_width = 7 * s_weekday_width;
-    int start_x = (bounds.size.w - total_weekdays_width) / 2;
+    int start_x = (full_bounds.size.w - total_weekdays_width) / 2;
 
     for (int i = 0; i < 7; i++) {
         fctx_begin_fill(&fctx);
@@ -287,7 +291,7 @@ static void unobstructed_did_change(void *context) {
 
 static void main_window_load(Window *window) {
     Layer *window_layer = window_get_root_layer(window);
-    GRect bounds = layer_get_unobstructed_bounds(window_layer);
+    GRect bounds = layer_get_bounds(window_layer);
 
     window_set_background_color(window, settings.color_background);
 
