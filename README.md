@@ -4,10 +4,25 @@
 
 A user on the Rebble discord posted recently that they loved the [Marked 2](https://apps.rebble.io/en_US/application/52aeeadab2a37d1efb000002) watchface, but since the original developer's website was down they were unable to change certain settings. I decided to take this opportunity to learn how to create watchfaces for Pebble, and used a combination of my miniscule C knowledge, the Pebble developer documentation, and GitHub Copilot to write this.
 
-![basalt-blue](./images/screenshots/basalt-blue.png)
-![chalk-green](./images/screenshots/chalk-green.png)
-![basalt-purple](./images/screenshots/basalt-purple.png)
-![chalk-red](./images/screenshots/chalk-black.png)
+## Fonts
+
+Version 2.0 uses scalable fonts via [pebble-fctx](https://github.com/jrmobley/pebble-fctx):
+- **Oswald Medium** - date and weekday letters  
+- **LECO 1976** - time display
+
+## Screenshots
+
+### Emery (228px)
+
+| Blue | Black | Green | Purple | White |
+|------|-------|-------|--------|-------|
+| ![Blue](./images/screenshots/emery-blue.png) | ![Black](./images/screenshots/emery-black.png) | ![Green](./images/screenshots/emery-gree.png) | ![Purple](./images/screenshots/emery-purple.png) | ![White](./images/screenshots/emery-white.png) |
+
+### Gabbro (228px round)
+
+| Blue | Black | Green | Purple | White |
+|------|-------|-------|--------|-------|
+| ![Blue](./images/screenshots/gabbro-blue.png) | ![Black](./images/screenshots/gabbro-black.png) | ![Green](./images/screenshots/gabbro-green.png) | ![Purple](./images/screenshots/gabbro-purple.png) | ![White](./images/screenshots/gabbro-white.png) |
 
 ### Download Link
 Want to try it out? You can install it now from the [Rebble store](https://apps.rebble.io/en_US/application/67ae29f70554c60009de76df)!
@@ -17,6 +32,7 @@ Want to try it out? You can install it now from the [Rebble store](https://apps.
 - [x] Preferences
 - [x] PTR Support
 - [x] Add images
+- [x] Scalable fonts (pebble-fctx)
 - [ ] Customizable fonts
     - LECO
     - Bitham Bold
