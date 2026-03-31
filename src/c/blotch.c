@@ -4,11 +4,29 @@
 #include <pebble-fctx/fpath.h>
 #include <pebble-fctx/ffont.h>
 
+#define SCREENSHOT_MODE 0
+#define SCREENSHOT_PRESET 0
+
 #define TIME_FONT_SIZE_BASE 42
 #define DATE_FONT_SIZE_BASE 24
 #define WEEK_FONT_SIZE_BASE 20
 #define WEEKDAY_WIDTH_BASE 18
 #define REFERENCE_HEIGHT 168
+
+#if SCREENSHOT_MODE
+static const struct {
+    GColor background;
+    GColor time;
+    GColor date;
+    GColor week;
+    GColor highlight;
+} presets[] = {
+    { .background = GColorOxfordBlue, .time = GColorWhite, .date = GColorLightGray, .week = GColorLightGray, .highlight = GColorWhite },
+    { .background = GColorDarkGreen, .time = GColorElectricBlue, .date = GColorVividCerulean, .week = GColorVividCerulean, .highlight = GColorElectricBlue },
+    { .background = GColorImperialPurple, .time = GColorMediumSpringGreen, .date = GColorJaegerGreen, .week = GColorJaegerGreen, .highlight = GColorSunsetOrange },
+    { .background = GColorBlack, .time = GColorSunsetOrange, .date = GColorMelon, .week = GColorMelon, .highlight = GColorJaegerGreen },
+};
+#endif
 
 static Window *s_main_window;
 static Layer *s_canvas_layer;
@@ -52,6 +70,29 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
     fctx_enable_aa(true);
 #endif
 
+#if SCREENSHOT_MODE
+    int time_layer_y = (bounds.size.h - s_time_font_size) / 2;
+
+    static char time_buffer[6];
+    snprintf(time_buffer, sizeof(time_buffer), "10:10");
+
+    fctx_begin_fill(&fctx);
+    fctx_set_fill_color(&fctx, settings.color_time);
+    fctx_set_text_em_height(&fctx, s_font_leco, s_time_font_size);
+    FPoint time_pos;
+    time_pos.x = INT_TO_FIXED(bounds.size.w - (PBL_IF_ROUND_ELSE(15, 10) * bounds.size.w) / 144);
+    time_pos.y = INT_TO_FIXED(time_layer_y + s_time_font_size / 2);
+    fctx_set_offset(&fctx, time_pos);
+    fctx_draw_string(&fctx, time_buffer, s_font_leco, GTextAlignmentRight, FTextAnchorMiddle);
+    fctx_end_fill(&fctx);
+
+    int date_layer_y = time_layer_y - s_date_font_size - 5;
+    int date_offset = (PBL_IF_ROUND_ELSE(25, 10) * bounds.size.w) / 144;
+
+    snprintf(s_month_buffer, sizeof(s_month_buffer), "July");
+    snprintf(s_day_buffer, sizeof(s_day_buffer), "17");
+    s_current_day_index = 0;
+#else
     time_t temp = time(NULL);
     struct tm *tick_time = localtime(&temp);
 
@@ -72,12 +113,13 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
 
     int date_layer_y = time_layer_y - s_date_font_size - 5;
     int date_offset = (PBL_IF_ROUND_ELSE(25, 10) * bounds.size.w) / 144;
+#endif
 
     fctx_begin_fill(&fctx);
     fctx_set_fill_color(&fctx, settings.color_date);
     fctx_set_text_em_height(&fctx, s_font_oswald, s_date_font_size);
     FPoint month_pos;
-    month_pos.x = INT_TO_FIXED(bounds.size.w - date_offset - (22 * bounds.size.w) / 144);
+    month_pos.x = INT_TO_FIXED(bounds.size.w - date_offset - (PBL_IF_ROUND_ELSE(23, 28) * bounds.size.w) / 144);
     month_pos.y = INT_TO_FIXED(date_layer_y + s_date_font_size / 2);
     fctx_set_offset(&fctx, month_pos);
     fctx_draw_string(&fctx, s_month_buffer, s_font_oswald, GTextAlignmentRight, FTextAnchorMiddle);
@@ -122,11 +164,19 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
 }
 
 static void prv_default_settings() {
+#if SCREENSHOT_MODE
+    settings.color_background = presets[SCREENSHOT_PRESET].background;
+    settings.color_time = presets[SCREENSHOT_PRESET].time;
+    settings.color_date = presets[SCREENSHOT_PRESET].date;
+    settings.color_week = presets[SCREENSHOT_PRESET].week;
+    settings.color_highlight = presets[SCREENSHOT_PRESET].highlight;
+#else
     settings.color_background = GColorOxfordBlue;
     settings.color_time = GColorWhite;
     settings.color_date = GColorLightGray;
     settings.color_week = GColorLightGray;
     settings.color_highlight = GColorWhite;
+#endif
 }
 
 static void prv_load_settings() {
@@ -142,6 +192,9 @@ static void prv_save_settings() {
 }
 
 static void update_time() {
+#if SCREENSHOT_MODE
+    layer_mark_dirty(s_canvas_layer);
+#else
     time_t temp = time(NULL);
     struct tm *tick_time = localtime(&temp);
 
@@ -164,6 +217,7 @@ static void update_time() {
     }
 
     layer_mark_dirty(s_canvas_layer);
+#endif
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
