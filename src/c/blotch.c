@@ -1,31 +1,124 @@
 #include <pebble.h>
 #include "settings.h"
+#include <pebble-fctx/fctx.h>
+#include <pebble-fctx/fpath.h>
+#include <pebble-fctx/ffont.h>
 
-#define TIME_LAYER_HEIGHT 50
-#define DATE_LAYER_HEIGHT 30
-#define WEEK_LAYER_HEIGHT 30
-#define WEEKDAY_WIDTH PBL_IF_ROUND_ELSE(17, 18)
-#define DATE_SUFFIX_WIDTH 20
+#define TIME_FONT_SIZE_BASE 42
+#define DATE_FONT_SIZE_BASE 24
+#define WEEK_FONT_SIZE_BASE 20
+#define WEEKDAY_WIDTH_BASE 18
+#define REFERENCE_HEIGHT 168
 
 static Window *s_main_window;
-static TextLayer *s_time_layer, *s_date_layer, *s_date_suffix_layer;
-static TextLayer *s_week_layers[7];
-static Layer *s_underline_layer;
+static Layer *s_canvas_layer;
 static int s_current_day_index = -1;
+
+static int s_time_font_size;
+static int s_date_font_size;
+static int s_week_font_size;
+static int s_weekday_width;
+
+static char s_month_buffer[12];
+static char s_day_buffer[4];
+
+static FFont* s_font_oswald;
+static FFont* s_font_leco;
 
 ClaySettings settings;
 
 static const char *weekdays[] = {"S", "M", "T", "W", "T", "F", "S"};
 
-static void underline_layer_update_proc(Layer *layer, GContext *ctx) {
-    graphics_context_set_stroke_width(ctx, 3);
-    graphics_context_set_stroke_color(ctx, settings.color_highlight);
+static void calculate_sizes(int height) {
+    int scale = (height * 100) / REFERENCE_HEIGHT;
+    s_time_font_size = (TIME_FONT_SIZE_BASE * scale) / 100;
+    s_date_font_size = (DATE_FONT_SIZE_BASE * scale) / 100;
+    s_week_font_size = (WEEK_FONT_SIZE_BASE * scale) / 100;
+    s_weekday_width = (WEEKDAY_WIDTH_BASE * scale) / 100;
+#ifdef PBL_ROUND
+    s_weekday_width = (s_weekday_width * 94) / 100;
+#endif
+}
 
-    GRect day_bounds = layer_get_frame(text_layer_get_layer(s_week_layers[s_current_day_index]));
-    int underline_width = PBL_IF_ROUND_ELSE(12, 18);
-    int x_position = day_bounds.origin.x + (day_bounds.size.w / 2) - (underline_width / 2);
-    GRect underline_rect = GRect(x_position, day_bounds.origin.y + day_bounds.size.h, underline_width, 2);
-    graphics_draw_rect(ctx, underline_rect);
+static void canvas_update_proc(Layer *layer, GContext *ctx) {
+    GRect bounds = layer_get_unobstructed_bounds(layer);
+    calculate_sizes(bounds.size.h);
+
+    FContext fctx;
+    fctx_init_context(&fctx, ctx);
+    fctx_set_color_bias(&fctx, 0);
+
+#ifdef PBL_COLOR
+    fctx_enable_aa(true);
+#endif
+
+    time_t temp = time(NULL);
+    struct tm *tick_time = localtime(&temp);
+
+    int time_layer_y = (bounds.size.h - s_time_font_size) / 2;
+
+    static char time_buffer[6];
+    strftime(time_buffer, sizeof(time_buffer), clock_is_24h_style() ? "%H:%M" : "%l:%M", tick_time);
+
+    fctx_begin_fill(&fctx);
+    fctx_set_fill_color(&fctx, settings.color_time);
+    fctx_set_text_em_height(&fctx, s_font_leco, s_time_font_size);
+    FPoint time_pos;
+    time_pos.x = INT_TO_FIXED(bounds.size.w - (PBL_IF_ROUND_ELSE(15, 10) * bounds.size.w) / 144);
+    time_pos.y = INT_TO_FIXED(time_layer_y + s_time_font_size / 2);
+    fctx_set_offset(&fctx, time_pos);
+    fctx_draw_string(&fctx, time_buffer, s_font_leco, GTextAlignmentRight, FTextAnchorMiddle);
+    fctx_end_fill(&fctx);
+
+    int date_layer_y = time_layer_y - s_date_font_size - 5;
+    int date_offset = (PBL_IF_ROUND_ELSE(25, 10) * bounds.size.w) / 144;
+
+    fctx_begin_fill(&fctx);
+    fctx_set_fill_color(&fctx, settings.color_date);
+    fctx_set_text_em_height(&fctx, s_font_oswald, s_date_font_size);
+    FPoint month_pos;
+    month_pos.x = INT_TO_FIXED(bounds.size.w - date_offset - (22 * bounds.size.w) / 144);
+    month_pos.y = INT_TO_FIXED(date_layer_y + s_date_font_size / 2);
+    fctx_set_offset(&fctx, month_pos);
+    fctx_draw_string(&fctx, s_month_buffer, s_font_oswald, GTextAlignmentRight, FTextAnchorMiddle);
+    fctx_end_fill(&fctx);
+
+    fctx_begin_fill(&fctx);
+    fctx_set_fill_color(&fctx, settings.color_highlight);
+    fctx_set_text_em_height(&fctx, s_font_oswald, s_date_font_size);
+    FPoint day_pos;
+    day_pos.x = INT_TO_FIXED(bounds.size.w - date_offset);
+    day_pos.y = INT_TO_FIXED(date_layer_y + s_date_font_size / 2);
+    fctx_set_offset(&fctx, day_pos);
+    fctx_draw_string(&fctx, s_day_buffer, s_font_oswald, GTextAlignmentRight, FTextAnchorMiddle);
+    fctx_end_fill(&fctx);
+
+    int week_layer_y = time_layer_y + s_time_font_size + (bounds.size.h - (time_layer_y + s_time_font_size) - s_week_font_size) / 8;
+    int total_weekdays_width = 7 * s_weekday_width;
+    int start_x = (bounds.size.w - total_weekdays_width) / 2;
+
+    for (int i = 0; i < 7; i++) {
+        fctx_begin_fill(&fctx);
+        fctx_set_fill_color(&fctx, i == s_current_day_index ? settings.color_highlight : settings.color_week);
+        fctx_set_text_em_height(&fctx, s_font_oswald, s_week_font_size);
+        FPoint letter_pos;
+        letter_pos.x = INT_TO_FIXED(start_x + i * s_weekday_width + s_weekday_width / 2);
+        letter_pos.y = INT_TO_FIXED(week_layer_y + s_week_font_size / 2);
+        fctx_set_offset(&fctx, letter_pos);
+        fctx_draw_string(&fctx, weekdays[i], s_font_oswald, GTextAlignmentCenter, FTextAnchorMiddle);
+        fctx_end_fill(&fctx);
+    }
+
+    if (s_current_day_index >= 0) {
+        graphics_context_set_stroke_width(ctx, 3);
+        graphics_context_set_stroke_color(ctx, settings.color_highlight);
+        int underline_width = (PBL_IF_ROUND_ELSE(12, 18) * s_weekday_width) / WEEKDAY_WIDTH_BASE;
+        int x_position = start_x + s_current_day_index * s_weekday_width + (s_weekday_width / 2) - (underline_width / 2);
+        GRect underline_rect = GRect(x_position, week_layer_y + s_week_font_size + 2, underline_width, 2);
+        graphics_draw_rect(ctx, underline_rect);
+    }
+
+    fctx_deinit_context(&fctx);
 }
 
 static void prv_default_settings() {
@@ -48,102 +141,29 @@ static void prv_save_settings() {
     prv_update_display();
 }
 
-///////////////////////////
-////// DEMO SETTINGS //////
-///////////////////////////
-
-// static void update_time() {
-//     // Hardcoded time and date for demo purposes
-//     struct tm tick_time;
-//     tick_time.tm_hour = 10;
-//     tick_time.tm_min = 10;
-//     tick_time.tm_mday = 17;
-//     tick_time.tm_mon = 11; // July (0-based index)
-//     tick_time.tm_wday = 0; // Sunday (0-based index)
-
-//     static char time_buffer[6];
-//     static char date_buffer[12];
-//     static char date_suffix_buffer[3]; // Buffer for the last two characters of the date
-//     static char month_buffer[10]; // Buffer for the month name
-
-//     static int last_hour = -1;
-//     static int last_minute = -1;
-//     static int last_day = -1;
-
-//     if (last_hour != tick_time.tm_hour || last_minute != tick_time.tm_min) {
-//         strftime(time_buffer, sizeof(time_buffer), clock_is_24h_style() ? "%H:%M" : "%l:%M", &tick_time);
-//         text_layer_set_text(s_time_layer, time_buffer);
-//         last_hour = tick_time.tm_hour;
-//         last_minute = tick_time.tm_min;
-//     }
-
-//     if (last_day != tick_time.tm_mday) {
-//         strftime(date_buffer, sizeof(date_buffer), "%B %d", &tick_time);
-//         // Split the date string into month name and last two characters
-//         snprintf(month_buffer, sizeof(month_buffer), "%.*s ", (int)(strlen(date_buffer) - 3), date_buffer); // Add space after month name
-//         snprintf(date_suffix_buffer, sizeof(date_suffix_buffer), "%s", &date_buffer[strlen(date_buffer) - 2]);
-
-//         text_layer_set_text(s_date_layer, month_buffer);
-//         text_layer_set_text(s_date_suffix_layer, date_suffix_buffer);
-//         last_day = tick_time.tm_mday;
-//     }
-
-//     // Calculate current weekday index
-//     int new_day_index = tick_time.tm_wday; // Sunday = 0, Saturday = 6
-//     if (s_current_day_index != new_day_index) {
-//         s_current_day_index = new_day_index;
-//         // Trigger redraw of the underline and update display
-//         layer_mark_dirty(s_underline_layer);
-//         prv_update_display();
-//     }
-// }
-
 static void update_time() {
     time_t temp = time(NULL);
     struct tm *tick_time = localtime(&temp);
 
-    static char time_buffer[6], date_buffer[12], date_suffix_buffer[3], month_buffer[12];
     static int last_hour = -1, last_minute = -1, last_day = -1;
 
     if (last_hour != tick_time->tm_hour || last_minute != tick_time->tm_min) {
-        strftime(time_buffer, sizeof(time_buffer), clock_is_24h_style() ? "%H:%M" : "%l:%M", tick_time);
-        text_layer_set_text(s_time_layer, time_buffer);
         last_hour = tick_time->tm_hour;
         last_minute = tick_time->tm_min;
     }
 
     if (last_day != tick_time->tm_mday) {
-        // Get month name
-        strftime(month_buffer, sizeof(month_buffer), "%B", tick_time);
-
-        // Get day as integer (no leading zero)
-        int day = tick_time->tm_mday;
-        snprintf(date_suffix_buffer, sizeof(date_suffix_buffer), "%d", day);
-
-        // Update month text layer
-        snprintf(date_buffer, sizeof(date_buffer), "%s ", month_buffer);
-        text_layer_set_text(s_date_layer, date_buffer);
-        text_layer_set_text(s_date_suffix_layer, date_suffix_buffer);
-
-        // Dynamically adjust month layer width so day fits
-        int day_width = (day < 10) ? 10 : 20; // tweak these values for your font
-        GRect bounds = layer_get_unobstructed_bounds(window_get_root_layer(s_main_window));
-        int date_layer_y = layer_get_frame(text_layer_get_layer(s_date_layer)).origin.y;
-
-        layer_set_frame(text_layer_get_layer(s_date_layer),
-                        GRect(0, date_layer_y, bounds.size.w - PBL_IF_ROUND_ELSE(25, 10) - day_width, DATE_LAYER_HEIGHT));
-        layer_set_frame(text_layer_get_layer(s_date_suffix_layer),
-                        GRect(bounds.size.w - PBL_IF_ROUND_ELSE(25, 10) - day_width, date_layer_y, day_width, DATE_LAYER_HEIGHT));
-
-        last_day = day;
+        strftime(s_month_buffer, sizeof(s_month_buffer), "%B", tick_time);
+        snprintf(s_day_buffer, sizeof(s_day_buffer), "%d", tick_time->tm_mday);
+        last_day = tick_time->tm_mday;
     }
 
     int new_day_index = tick_time->tm_wday;
     if (s_current_day_index != new_day_index) {
         s_current_day_index = new_day_index;
-        layer_mark_dirty(s_underline_layer);
-        prv_update_display();
     }
+
+    layer_mark_dirty(s_canvas_layer);
 }
 
 static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
@@ -151,18 +171,7 @@ static void tick_handler(struct tm *tick_time, TimeUnits units_changed) {
 }
 
 static void prv_update_display() {
-    text_layer_set_text_color(s_time_layer, settings.color_time);
-    text_layer_set_text_color(s_date_layer, settings.color_date);
-    text_layer_set_text_color(s_date_suffix_layer, settings.color_highlight);
-    for (int i = 0; i < 7; i++) {
-        text_layer_set_text_color(s_week_layers[i], i == s_current_day_index ? settings.color_highlight : settings.color_week);
-        layer_mark_dirty(text_layer_get_layer(s_week_layers[i]));
-    }
-
-    layer_mark_dirty(text_layer_get_layer(s_time_layer));
-    layer_mark_dirty(text_layer_get_layer(s_date_layer));
-    layer_mark_dirty(text_layer_get_layer(s_date_suffix_layer));
-    layer_mark_dirty(s_underline_layer);
+    layer_mark_dirty(s_canvas_layer);
     window_set_background_color(s_main_window, settings.color_background);
 }
 
@@ -217,41 +226,7 @@ static void prv_inbox_received_handler(DictionaryIterator *iter, void *context) 
 static void unobstructed_will_change(GRect final_unobstructed_screen_area, void *context) {}
 
 static void unobstructed_did_change(void *context) {
-    Layer *window_layer = window_get_root_layer(s_main_window);
-    GRect bounds = layer_get_unobstructed_bounds(window_layer);
-
-    static GRect last_bounds = { .origin = {0, 0}, .size = {0, 0} };
-    if (grect_equal(&bounds, &last_bounds)) {
-        return;
-    }
-    last_bounds = bounds;
-
-    int time_layer_y = (bounds.size.h - TIME_LAYER_HEIGHT) / 2;
-    layer_set_frame(text_layer_get_layer(s_time_layer), GRect(0, time_layer_y, bounds.size.w - 10, TIME_LAYER_HEIGHT));
-
-    int date_layer_y = (time_layer_y - DATE_LAYER_HEIGHT) / 1;
-    layer_set_frame(text_layer_get_layer(s_date_layer), GRect(0, date_layer_y, bounds.size.w - PBL_IF_ROUND_ELSE(25, 10) - DATE_SUFFIX_WIDTH, DATE_LAYER_HEIGHT));
-
-    layer_set_frame(text_layer_get_layer(s_date_suffix_layer), GRect(bounds.size.w - PBL_IF_ROUND_ELSE(25, 10) - DATE_SUFFIX_WIDTH, date_layer_y, DATE_SUFFIX_WIDTH, DATE_LAYER_HEIGHT));
-
-    int week_layer_y = time_layer_y + TIME_LAYER_HEIGHT + (bounds.size.h - (time_layer_y + TIME_LAYER_HEIGHT) - WEEK_LAYER_HEIGHT) / 8;
-    int total_weekdays_width = 7 * WEEKDAY_WIDTH;
-    int start_x = (bounds.size.w - total_weekdays_width) / 2;
-
-    for (int i = 0; i < 7; i++) {
-        layer_set_frame(text_layer_get_layer(s_week_layers[i]), GRect(start_x + i * WEEKDAY_WIDTH, week_layer_y, 20, WEEK_LAYER_HEIGHT));
-    }
-
-    layer_set_frame(s_underline_layer, bounds);
-    layer_mark_dirty(s_underline_layer);
-}
-
-static void configure_text_layer(TextLayer *layer, GRect frame, GFont font, GTextAlignment alignment, GColor background_color, GColor text_color) {
-    text_layer_set_font(layer, font);
-    text_layer_set_text_alignment(layer, alignment);
-    text_layer_set_background_color(layer, background_color);
-    text_layer_set_text_color(layer, text_color);
-    layer_set_frame(text_layer_get_layer(layer), frame);
+    layer_mark_dirty(s_canvas_layer);
 }
 
 static void main_window_load(Window *window) {
@@ -260,46 +235,20 @@ static void main_window_load(Window *window) {
 
     window_set_background_color(window, settings.color_background);
 
-    int time_layer_y = (bounds.size.h - TIME_LAYER_HEIGHT) / 2;
-    s_time_layer = text_layer_create(GRect(0, time_layer_y, bounds.size.w - 10, TIME_LAYER_HEIGHT));
-    configure_text_layer(s_time_layer, GRect(0, time_layer_y, bounds.size.w - 10, TIME_LAYER_HEIGHT), fonts_get_system_font(FONT_KEY_LECO_42_NUMBERS), GTextAlignmentRight, GColorClear, settings.color_time);
-    layer_add_child(window_layer, text_layer_get_layer(s_time_layer));
+    s_font_oswald = ffont_create_from_resource(RESOURCE_ID_FONT_OSWALD_MEDIUM);
+    s_font_leco = ffont_create_from_resource(RESOURCE_ID_FONT_LECO_REGULAR);
 
-    int date_layer_y = (time_layer_y - DATE_LAYER_HEIGHT) / 1;
-    s_date_layer = text_layer_create(GRect(0, date_layer_y, bounds.size.w - PBL_IF_ROUND_ELSE(25, 10) - DATE_SUFFIX_WIDTH, DATE_LAYER_HEIGHT));
-    configure_text_layer(s_date_layer, GRect(0, date_layer_y, bounds.size.w - PBL_IF_ROUND_ELSE(25, 10) - DATE_SUFFIX_WIDTH, DATE_LAYER_HEIGHT), fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD), GTextAlignmentRight, GColorClear, settings.color_date);
-    layer_add_child(window_layer, text_layer_get_layer(s_date_layer));
-
-    s_date_suffix_layer = text_layer_create(GRect(bounds.size.w - PBL_IF_ROUND_ELSE(25, 10) - DATE_SUFFIX_WIDTH, date_layer_y, DATE_SUFFIX_WIDTH, DATE_LAYER_HEIGHT));
-    configure_text_layer(s_date_suffix_layer, GRect(bounds.size.w - PBL_IF_ROUND_ELSE(25, 10) - DATE_SUFFIX_WIDTH, date_layer_y, DATE_SUFFIX_WIDTH, DATE_LAYER_HEIGHT), fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD), GTextAlignmentLeft, GColorClear, settings.color_highlight);
-    layer_add_child(window_layer, text_layer_get_layer(s_date_suffix_layer));
-
-    int week_layer_y = time_layer_y + TIME_LAYER_HEIGHT + (bounds.size.h - (time_layer_y + TIME_LAYER_HEIGHT) - WEEK_LAYER_HEIGHT) / 8;
-    int total_weekdays_width = 7 * WEEKDAY_WIDTH;
-    int start_x = (bounds.size.w - total_weekdays_width) / 2;
-
-    for (int i = 0; i < 7; i++) {
-        s_week_layers[i] = text_layer_create(GRect(start_x + i * WEEKDAY_WIDTH, week_layer_y, 20, WEEK_LAYER_HEIGHT));
-        configure_text_layer(s_week_layers[i], GRect(start_x + i * WEEKDAY_WIDTH, week_layer_y, 20, WEEK_LAYER_HEIGHT), fonts_get_system_font(FONT_KEY_GOTHIC_24_BOLD), GTextAlignmentCenter, GColorClear, settings.color_date);
-        text_layer_set_text(s_week_layers[i], weekdays[i]);
-        layer_add_child(window_layer, text_layer_get_layer(s_week_layers[i]));
-    }
-
-    s_underline_layer = layer_create(bounds);
-    layer_set_update_proc(s_underline_layer, underline_layer_update_proc);
-    layer_add_child(window_layer, s_underline_layer);
+    s_canvas_layer = layer_create(bounds);
+    layer_set_update_proc(s_canvas_layer, canvas_update_proc);
+    layer_add_child(window_layer, s_canvas_layer);
 
     update_time();
 }
 
 static void main_window_unload(Window *window) {
-    text_layer_destroy(s_time_layer);
-    text_layer_destroy(s_date_layer);
-    text_layer_destroy(s_date_suffix_layer);
-    for (int i = 0; i < 7; i++) {
-        text_layer_destroy(s_week_layers[i]);
-    }
-    layer_destroy(s_underline_layer);
+    layer_destroy(s_canvas_layer);
+    ffont_destroy(s_font_oswald);
+    ffont_destroy(s_font_leco);
 }
 
 static void init() {
@@ -307,7 +256,7 @@ static void init() {
 
     app_message_register_inbox_received(prv_inbox_received_handler);
     app_message_open(128, 128);
-    
+
     s_main_window = window_create();
     window_set_window_handlers(s_main_window, (WindowHandlers) {
         .load = main_window_load,

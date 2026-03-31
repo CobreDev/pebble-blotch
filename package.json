@@ -7,7 +7,9 @@
   ],
   "private": true,
   "dependencies": {
-    "pebble-clay": "^1.0.4"
+    "@rebble/clay": "^1.0.4",
+    "pebble-fctx": "^1.6.5",
+    "pebble-fctx-compiler": "^1.2.2"
   },
   "pebble": {
     "displayName": "blotch",
@@ -19,7 +21,9 @@
       "basalt",
       "chalk",
       "diorite",
-      "emery"
+      "emery",
+      "flint",
+      "gabbro"
     ],
     "watchapp": {
       "watchface": true
@@ -41,6 +45,16 @@
           "menuIcon": true,
           "name": "MENU_ICON",
           "type": "bitmap"
+        },
+        {
+          "type": "raw",
+          "name": "FONT_OSWALD_MEDIUM",
+          "file": "fonts/Oswald-Medium.ffont"
+        },
+        {
+          "type": "raw",
+          "name": "FONT_LECO_REGULAR",
+          "file": "fonts/LECO_1976-Regular.ffont"
         }
       ]
     }
