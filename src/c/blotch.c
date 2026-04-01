@@ -125,7 +125,10 @@ static void canvas_update_proc(Layer *layer, GContext *ctx) {
     fctx_set_fill_color(&fctx, settings.color_date);
     fctx_set_text_em_height(&fctx, s_font_oswald, s_date_font_size);
     FPoint month_pos;
-    month_pos.x = INT_TO_FIXED(full_bounds.size.w - date_offset - (PBL_IF_ROUND_ELSE(23, 28) * full_bounds.size.w) / 144);
+    int day_chars = strlen(s_day_buffer);
+    int day_width = (s_date_font_size * 12 * day_chars) / 24;
+    int space_width = s_date_font_size / 10;
+    month_pos.x = INT_TO_FIXED(full_bounds.size.w - date_offset - day_width - space_width);
     month_pos.y = INT_TO_FIXED(date_layer_y + s_date_font_size / 2);
     fctx_set_offset(&fctx, month_pos);
     fctx_draw_string(&fctx, s_month_buffer, s_font_oswald, GTextAlignmentRight, FTextAnchorMiddle);
