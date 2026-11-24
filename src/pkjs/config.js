@@ -1,3 +1,4 @@
+// Keep the color defaultValues in sync with prv_default_settings() in src/c/blotch.c
 module.exports = [
   {
     "type": "heading",
