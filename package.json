@@ -11,6 +11,9 @@
     "pebble-fctx": "^1.6.5",
     "pebble-fctx-compiler": "^1.2.2"
   },
+  "overrides": {
+    "xml2js": "^0.5.0"
+  },
   "pebble": {
     "displayName": "blotch",
     "uuid": "e03ca915-a42b-475e-b404-f5cf56f0d3c4",
