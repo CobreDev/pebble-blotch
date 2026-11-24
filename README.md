@@ -6,7 +6,7 @@ A user on the Rebble discord posted recently that they loved the [Marked 2](http
 
 ## Fonts
 
-Version 2.0 uses scalable fonts via [pebble-fctx](https://github.com/jrmobley/pebble-fctx):
+Uses scalable fonts via [pebble-fctx](https://github.com/jrmobley/pebble-fctx):
 - **Oswald Medium** - date and weekday letters  
 - **LECO 1976** - time display
 

@@ -3,7 +3,11 @@
   "author": "cobre",
   "version": "2.2.0",
   "keywords": [
-    "Marked, Underline, Date, Day, Digital"
+    "Marked",
+    "Underline",
+    "Date",
+    "Day",
+    "Digital"
   ],
   "private": true,
   "dependencies": {
